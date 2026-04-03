@@ -24,7 +24,7 @@ export default function ProductGridDesktop({ rows }) {
                     <img
                         src={params.row.Image}
                         alt={params.value}
-                        style={{ width: 100, height: 100, objectFit: "contain" }}
+                        style={{ width: 100, height: 100, objectFit: "contain", display: "block" }}
                     />
 
                 </Box>
@@ -37,7 +37,19 @@ export default function ProductGridDesktop({ rows }) {
         },
         { field: "Width", headerName: "Szerokość", width: 100, type: "number", renderCell: (params) => `${params.value} mm`, },
         { field: "Thickness", headerName: "Grubość", width: 100, type: "number", renderCell: (params) => `${params.value} mm`, },
-        { field: "Tpi", headerName: "TPI", width: 70 },
+        {
+            field: "Tpi",
+            headerName: "TPI",
+            width: 70,
+            valueGetter: (value, row) => {
+                const raw = row.Tpi;
+                if (!raw) return null;
+                const [num, den] = raw.split('/').map(Number);
+                if (!den || isNaN(num) || isNaN(den)) return null;
+                return num / den;
+            },
+            renderCell: (params) => params.row.Tpi ?? ''
+        },
         { field: "Price", headerName: "Cena brutto", width: 120, type: "number", renderCell: (params) => `${params.value} zł`, },
         {
             field: 'Title_URL',
@@ -68,10 +80,10 @@ export default function ProductGridDesktop({ rows }) {
         }
     ];
 
-
     return (
         <Box sx={{ width: "100%", width: '100%' }}>
             <DataGrid
+                disableColumnMenu
                 rows={rows}
                 columns={columns}
                 rowHeight={80}

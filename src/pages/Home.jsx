@@ -7,24 +7,37 @@ import FilterPanel from "../components/FiltersPanel";
 
 
 export default function Home({ products, loading }) {
+    const machines = [];
+    const theme = useTheme();
+    const [selectedMachines, setSelectedMachines] = useState([]);
     const [selectedTypes, setSelectedTypes] = useState([]);
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
-    const productsTypes = useMemo(() => {
+    const sawTypes = useMemo(() => {
         return [...new Set(products.map((s) => s.Type))].sort();
     }, []);
 
     const filteredProducts = useMemo(() => {
-    return products.filter((product) => {
-      if (selectedTypes.length > 0 && !selectedTypes.includes(product.Type)) {
-        return false;
-      }
-      return true;
-    });
-  }, [selectedTypes]);
+        return products.filter((product) => {
+            if (selectedMachines.length > 0 && !selectedMachines.some((mid) => product.compatibleMachines.includes(mid))) return false;
+            if (selectedTypes.length > 0 && !selectedTypes.includes(product.Type)) {
+                return false;
+            }
+            return true;
+        });
+    }, [selectedTypes]);
 
-  const handleClearFilters = () => {
-    setSelectedTypes([]);
-  };
+    const handleClearFilters = () => {
+        setSelectedMachines([]);
+        setSelectedTypes([]);
+    };
+
+    const filterProps = {
+        machines, sawTypes, selectedMachines, selectedTypes,
+        onMachinesChange: setSelectedMachines,
+        onTypesChange: setSelectedTypes,
+        onClearFilters: handleClearFilters,
+    };
 
     const rows = filteredProducts.map((p, index) => ({
         id: index + 1,
@@ -38,17 +51,12 @@ export default function Home({ products, loading }) {
         Tpi: p.Tpi,
         Price: p.Price,
     }));
-    console.log(rows)
+    console.log(rows);
     if (loading) return <CircularProgress />;
     return (
         <>
-            <Box sx={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
-                <FilterPanel
-                    productsTypes={productsTypes}
-                    selectedTypes={selectedTypes}
-                    onTypesChange={setSelectedTypes}
-                    onClearFilters={handleClearFilters}
-                />
+            <Box sx={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', height: '100vh', overflow: 'hidden' }}>
+                {!isMobile && <FilterPanel {...filterProps} />}
 
                 <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
                     <Box
@@ -63,7 +71,7 @@ export default function Home({ products, loading }) {
                             bgcolor: 'background.paper',
                         }}
                     >
-                        
+
                         <Typography variant="h5" fontWeight={700} color="primary.main">
                             Konfigurator Pił Taśmowych
                         </Typography>
@@ -80,5 +88,4 @@ export default function Home({ products, loading }) {
             <Footer />
         </>
     )
-
 }
