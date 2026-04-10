@@ -55,7 +55,7 @@ export default function Home({ products, loading }) {
     if (loading) return <CircularProgress />;
     return (
         <>
-            <Box sx={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', height: '100vh', overflow: 'hidden' }}>
+            <Box sx={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', height: 'auto', overflow: 'hidden' }}>
                 {!isMobile && <FilterPanel {...filterProps} />}
 
                 <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
@@ -80,7 +80,7 @@ export default function Home({ products, loading }) {
                         </Typography>
                     </Box>
 
-                    <Box sx={{ flex: 1, p: 2, overflow: 'auto' }}>
+                    <Box sx={{ flex: 1, p: 2 }}>
                         <ProductGridDesktop rows={rows} />
                     </Box>
                 </Box>

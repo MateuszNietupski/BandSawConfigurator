@@ -8272,7 +8272,7 @@
         "Length": 4000.0,
         "Width": 35.0,
         "Thickness": 0.9,
-        "Type": null
+        "Type": "GROM"
       },
       {
         "Title": "Piła taśmowa do metalu | bimetalowa OPTI Profil | 2720 x 27 x 0,9 mm | TPI 8/11 - FENES",
@@ -8285,7 +8285,8 @@
         "Length": 2720.0,
         "Width": 27.0,
         "Thickness": 0.9,
-        "Type": null
+        "Tpi": "8/11",
+        "Type": "OPTI Profil"
       },
       {
         "Title": "Piła taśmowa do metalu bimetalowa TAJFUN OPTI CUT M42 do pełnych materiałów | 1640 x 13 x 0,65 mm | TPI 14/18",

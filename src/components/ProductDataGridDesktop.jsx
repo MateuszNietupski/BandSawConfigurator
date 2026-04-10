@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Box, Button, Link } from "@mui/material";
+import { Box, Button, Tooltip, Chip } from "@mui/material";
 import StorefrontIcon from '@mui/icons-material/Storefront';
 
 
@@ -9,10 +9,23 @@ export default function ProductGridDesktop({ rows }) {
         pageSize: 10,
         page: 0,
     });
+
+    const typeDescriptions = {
+        'OPTI CUT M42': 'Uniwersalna piła bimetalowa M42. Optymalna do cięcia stali konstrukcyjnych, profili i prętów. Dobry stosunek ceny do wydajności.',
+        'BEST CUT M51': 'Wysokowydajna piła bimetalowa M51. Do stali trudnoobrabialnych, stopowych i nierdzewnych. Zwiększona trwałość i odporność na ciepło.',
+        'PROFIL CUT M42': 'Piła bimetalowa M42 do cięcia profili i rur cienkościennych. Zmienny podziałka zębów zapewnia czyste cięcie bez drgań.',
+    };
+
+    const typeColors = {
+        'OPTI CUT M42': { bg: '#FFF3E0', border: '#FB8C00', text: '#E65100' },
+        'BEST CUT M51': { bg: '#FFEBEE', border: '#E53935', text: '#B71C1C' },
+        'PROFIL CUT M42': { bg: '#E8F5E9', border: '#43A047', text: '#1B5E20' },
+    };
+
     const columns = [
         {
             field: "Image",
-            headerName: "Produkt",
+            headerName: "Piła taśmowa",
             flex: 1,
             sortable: false,
             headerAlign: 'center',
@@ -31,7 +44,30 @@ export default function ProductGridDesktop({ rows }) {
             ),
         },
 
-        { field: "Type", headerName: "Typ", width: 150 },
+        {
+            field: 'Type',
+            headerName: 'Typ',
+            width: 160,
+            renderCell: (params) => {
+                const colors = typeColors[params.value] || { bg: '#F5F5F5', border: '#9E9E9E', text: '#616161' };
+                return (
+                    <Tooltip title={typeDescriptions[params.value] || ''} arrow placement="right">
+                        <Chip
+                            label={params.value}
+                            size="small"
+                            variant="outlined"
+                            sx={{
+                                cursor: 'help',
+                                fontWeight: 600,
+                                bgcolor: colors.bg,
+                                borderColor: colors.border,
+                                color: colors.text,
+                            }}
+                        />
+                    </Tooltip>
+                );
+            },
+        },
         {
             field: "Length", headerName: "Długość", width: 100, type: "number", renderCell: (params) => `${params.value} mm`,
         },
