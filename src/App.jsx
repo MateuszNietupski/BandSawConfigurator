@@ -8,13 +8,13 @@ import ProductsGridResponsive from './components/ProductsGridResponsive.jsx'
 import Home from './pages/Home.jsx';
 
 function App() {
-  const { products, loading, error } = useProducts()
+  const { saws, loading, error } = useProducts()
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       {error && <Typography color="error">Błąd ładowania produktów: {error.message}</Typography>}
-      <Home products={products} loading={loading} />
+      <Home saws={saws} loading={loading} />
     </ThemeProvider>
   )
 }

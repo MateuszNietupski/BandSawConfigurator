@@ -21,8 +21,8 @@ export default function ProductGridDesktop({ rows }) {
         'BEST CUT M51': { bg: '#FFEBEE', border: '#E53935', text: '#B71C1C' },
         'PROFIL CUT M42': { bg: '#E8F5E9', border: '#43A047', text: '#1B5E20' },
     };
-
-    const columns = [
+    console.log(rows);
+    const columnsDefinitions = [
         {
             field: "Image",
             headerName: "Piła taśmowa",
@@ -47,7 +47,7 @@ export default function ProductGridDesktop({ rows }) {
         {
             field: 'Type',
             headerName: 'Typ',
-            width: 160,
+            minWidth: 160,
             renderCell: (params) => {
                 const colors = typeColors[params.value] || { bg: '#F5F5F5', border: '#9E9E9E', text: '#616161' };
                 return (
@@ -69,14 +69,14 @@ export default function ProductGridDesktop({ rows }) {
             },
         },
         {
-            field: "Length", headerName: "Długość", width: 100, type: "number", renderCell: (params) => `${params.value} mm`,
+            field: "Length", headerName: "Długość", minWidth: 100, type: "number", renderCell: (params) => `${params.value} mm`,
         },
-        { field: "Width", headerName: "Szerokość", width: 100, type: "number", renderCell: (params) => `${params.value} mm`, },
-        { field: "Thickness", headerName: "Grubość", width: 100, type: "number", renderCell: (params) => `${params.value} mm`, },
+        { field: "Width", headerName: "Szerokość", minWidth: 100, type: "number", renderCell: (params) => `${params.value} mm`, },
+        { field: "Thickness", headerName: "Grubość", minWidth: 100, type: "number", renderCell: (params) => `${params.value} mm`, },
         {
             field: "Tpi",
             headerName: "TPI",
-            width: 70,
+            minWidth: 70,
             valueGetter: (value, row) => {
                 const raw = row.Tpi;
                 if (!raw) return null;
@@ -86,11 +86,10 @@ export default function ProductGridDesktop({ rows }) {
             },
             renderCell: (params) => params.row.Tpi ?? ''
         },
-        { field: "Price", headerName: "Cena brutto", width: 120, type: "number", renderCell: (params) => `${params.value} zł`, },
         {
             field: 'Title_URL',
             headerName: '',
-            width: 170,
+            minWidth: 200,
             sortable: false,
             filterable: false,
             renderCell: (params) => (
@@ -100,7 +99,7 @@ export default function ProductGridDesktop({ rows }) {
                     color="primary"
                     startIcon={<StorefrontIcon />}
                     component="a"
-                    href={params.row.URL}
+                    href={params.row.Title_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
@@ -110,11 +109,16 @@ export default function ProductGridDesktop({ rows }) {
                         fontSize: 12,
                     }}
                 >
-                    Przejdź do sklepu
+                    Sprawdź cenę w sklepie
                 </Button>
             ),
         }
     ];
+    const columns = columnsDefinitions.map(col => ({
+    headerAlign: 'center', // Centrowanie nagłówka
+    align: 'center',       // Centrowanie treści
+    ...col                 // Nadpisanie specyficznymi danymi
+}));
 
     return (
         <Box sx={{ width: "100%", width: '100%' }}>
