@@ -30,9 +30,19 @@ const MachineDataGrid = ({ machines, onSelectMachine }) => {
             field: 'name',
             headerName: 'Nazwa maszyny',
             flex: 2,
-            minWidth: isMobile ? 100 : 180,
+            minWidth: isMobile ? 100 : 200,
             renderCell: (params) => (
-                <Box sx={{ fontSize: isMobile ? 11 : 14, fontWeight: 600, lineHeight: 1.3 }}>
+                <Box sx={{
+                    fontSize: isMobile ? 11 : 14,
+                    fontWeight: 600,
+                    lineHeight: 1.2,
+                    whiteSpace: 'normal', // Pozwala na zawijanie tekstu
+                    wordBreak: 'break-word', // Rozbija długie słowa, jeśli to konieczne
+                    display: '-webkit-box',
+                    WebkitLineClamp: 3, // Ogranicza do np. 3 linii (opcjonalnie)
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                }}>
                     {params.value}
                 </Box>
             ),
@@ -41,9 +51,11 @@ const MachineDataGrid = ({ machines, onSelectMachine }) => {
             field: 'manufacturer',
             headerName: 'Producent',
             flex: 1,
-            minWidth: isMobile ? 70 : 140,
+            align: 'center',
+            headerAlign: 'center',
+            minWidth: isMobile ? 70 : 100,
             renderCell: (params) => (
-                <Box sx={{ fontSize: isMobile ? 11 : 14, color: 'text.secondary' }}>
+                <Box sx={{ fontSize: isMobile ? 10 : 12, fontWeight: 600, lineHeight: 1.3 }}>
                     {params.value}
                 </Box>
             ),
@@ -85,7 +97,7 @@ const MachineDataGrid = ({ machines, onSelectMachine }) => {
                 rows={machines}
                 columns={columns}
                 rowHeight={isMobile ? 60 : 80}
-                pageSizeOptions={[10, 25, 50]}
+                pageSizeOptions={[5, 10, 20, 50]}
                 initialState={{
                     pagination: { paginationModel: { pageSize: 10 } },
                     sorting: { sortModel: [{ field: 'name', sort: 'asc' }] },

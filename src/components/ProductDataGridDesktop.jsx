@@ -22,11 +22,11 @@ export default function ProductGridDesktop({ rows }) {
         'PROFIL CUT M42': { bg: '#E8F5E9', border: '#43A047', text: '#1B5E20' },
     };
     console.log(rows);
-    const columnsDefinitions = [
+    const columns = [
         {
             field: "Image",
             headerName: "Piła taśmowa",
-            flex: 1,
+            flex: 1.5,
             sortable: false,
             headerAlign: 'center',
             align: 'center',
@@ -47,6 +47,9 @@ export default function ProductGridDesktop({ rows }) {
         {
             field: 'Type',
             headerName: 'Typ',
+            flex: 1,
+            headerAlign: 'center',
+            align: 'center',
             minWidth: 160,
             renderCell: (params) => {
                 const colors = typeColors[params.value] || { bg: '#F5F5F5', border: '#9E9E9E', text: '#616161' };
@@ -69,13 +72,16 @@ export default function ProductGridDesktop({ rows }) {
             },
         },
         {
-            field: "Length", headerName: "Długość", minWidth: 100, type: "number", renderCell: (params) => `${params.value} mm`,
+            field: "Length", headerAlign: 'center', align: 'center', flex: 1, headerName: "Długość", minWidth: 100, type: "number", renderCell: (params) => `${params.value} mm`,
         },
-        { field: "Width", headerName: "Szerokość", minWidth: 100, type: "number", renderCell: (params) => `${params.value} mm`, },
-        { field: "Thickness", headerName: "Grubość", minWidth: 100, type: "number", renderCell: (params) => `${params.value} mm`, },
+        { field: "Width", headerAlign: 'center', align: 'center', flex: 1, headerName: "Szerokość", minWidth: 100, type: "number", renderCell: (params) => `${params.value} mm`, },
+        { field: "Thickness", flex: 1, headerAlign: 'center', align: 'center', headerName: "Grubość", minWidth: 100, type: "number", renderCell: (params) => `${params.value} mm`, },
         {
             field: "Tpi",
             headerName: "TPI",
+            flex: 1,
+            headerAlign: 'center',
+            align: 'center',
             minWidth: 70,
             valueGetter: (value, row) => {
                 const raw = row.Tpi;
@@ -90,6 +96,9 @@ export default function ProductGridDesktop({ rows }) {
             field: 'Title_URL',
             headerName: '',
             minWidth: 200,
+            flex: 1,
+            headerAlign: 'center',
+            align: 'center',
             sortable: false,
             filterable: false,
             renderCell: (params) => (
@@ -114,11 +123,6 @@ export default function ProductGridDesktop({ rows }) {
             ),
         }
     ];
-    const columns = columnsDefinitions.map(col => ({
-    headerAlign: 'center', // Centrowanie nagłówka
-    align: 'center',       // Centrowanie treści
-    ...col                 // Nadpisanie specyficznymi danymi
-}));
 
     return (
         <Box sx={{ width: "100%", width: '100%' }}>
@@ -147,7 +151,6 @@ export default function ProductGridDesktop({ rows }) {
                         alignItems: 'center',
                     },
                 }}
-
             />
         </Box>
     );

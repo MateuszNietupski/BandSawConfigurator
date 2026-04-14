@@ -1,7 +1,7 @@
 [
   {
     "ProductId": 64537,
-    "Name": "Przecinarka taśmowa ręczna do metalu SQ-V10 | 1100W - OPTIMUM 3184210",
+    "Name": "Przecinarka taśmowa ręczna SQ-V10 | 1100W",
     "CatalogNumber": "OPT_3184210",
     "Weight": "41,000",
     "Producer": "OPTIMUM",
@@ -15,7 +15,7 @@
   },
   {
     "ProductId": 64538,
-    "Name": "Przecinarka taśmowa do metalu SQ-V13 | do cięcia ukośnego | 400 W - OPTIMUM 3194013",
+    "Name": "Przecinarka taśmowa SQ-V13 | do cięcia ukośnego | 400 W",
     "CatalogNumber": "OPT_3194013",
     "Weight": "41,000",
     "Producer": "OPTIMUM",
@@ -29,7 +29,7 @@
   },
   {
     "ProductId": 64539,
-    "Name": "Przenośna przecinarka taśmowa do metalu SP-11V | do cięcia ukośnego | 850 W - OPTIMUM 3300070",
+    "Name": "Przenośna przecinarka taśmowa SP-11V do cięcia ukośnego 850 W",
     "CatalogNumber": "OPT_3300070",
     "Weight": "41,000",
     "Producer": "OPTIMUM",
@@ -43,7 +43,7 @@
   },
   {
     "ProductId": 64540,
-    "Name": "Przenośna przecinarka taśmowa do metalu SP-13V | do cięcia ukośnego |1000 W - OPTIMUM 3300075",
+    "Name": "Przenośna przecinarka taśmowa SP-13V | do cięcia ukośnego | 1000 W",
     "CatalogNumber": "OPT_3300075",
     "Weight": "41,000",
     "Producer": "OPTIMUM",
@@ -57,7 +57,7 @@
   },
   {
     "ProductId": 64541,
-    "Name": "Przecinarka taśmowa do metalu S 100G | 370 W - OPTIMUM 3300100",
+    "Name": "Przecinarka taśmowa S 100G | 370 W",
     "CatalogNumber": "OPT_3300100",
     "Weight": "41,000",
     "Producer": "OPTIMUM",
@@ -71,7 +71,7 @@
   },
   {
     "ProductId": 64554,
-    "Name": "Przecinarka taśmowa do metalu S 131GH | 1100 W - OPTIMUM 3300131",
+    "Name": "Przecinarka taśmowa S 131GH | 1100 W",
     "CatalogNumber": "OPT_3300131",
     "Weight": "81,000",
     "Producer": "OPTIMUM",
@@ -85,7 +85,7 @@
   },
   {
     "ProductId": 64555,
-    "Name": "Przecinarka taśmowa do metalu S 150G Vario | 1100 W - OPTIMUM 3300150",
+    "Name": "Przecinarka taśmowa S 150G Vario | 1100 W",
     "CatalogNumber": "OPT_3300150",
     "Weight": "100,000",
     "Producer": "OPTIMUM",
@@ -99,7 +99,7 @@
   },
   {
     "ProductId": 64556,
-    "Name": "Przecinarka taśmowa do metalu S 181 z napędem pasowym | 750 W - OPTIMUM 3300181",
+    "Name": "Przecinarka taśmowa S 181 z napędem pasowym | 750 W",
     "CatalogNumber": "OPT_3300181",
     "Weight": "130,000",
     "Producer": "OPTIMUM",
@@ -113,7 +113,7 @@
   },
   {
     "ProductId": 64557,
-    "Name": "Przecinarka taśmowa do metalu S 181G z przekładnią zmianową | 750 W - OPTIMUM 3300182",
+    "Name": "Przecinarka taśmowa S 181G z przekładnią zmianową | 750 W",
     "CatalogNumber": "OPT_3300182",
     "Weight": "130,000",
     "Producer": "OPTIMUM",
@@ -127,7 +127,7 @@
   },
   {
     "ProductId": 64558,
-    "Name": "Przecinarka taśmowa do metalu SD 200G | 750 W - OPTIMUM 3300200",
+    "Name": "Przecinarka taśmowa SD 200G | 750 W",
     "CatalogNumber": "OPT_3300200",
     "Weight": "130,000",
     "Producer": "OPTIMUM",
@@ -141,7 +141,7 @@
   },
   {
     "ProductId": 65811,
-    "Name": "Przecinarka taśmowa automatyczna do metalu PTE-2S 350 | 3,0 kW - FENES",
+    "Name": "Przecinarka taśmowa automatyczna PTE-2S 350 | 3,0 kW",
     "CatalogNumber": "FEN_2900-000-021-035",
     "Weight": "1600,000",
     "Producer": "FENES",
@@ -155,7 +155,7 @@
   },
   {
     "ProductId": 65629,
-    "Name": "Przecinarka taśmowa MBS 105 do metalu | do cięcia ukośnego | 850 W - METALLKRAFT 3630105",
+    "Name": "Przecinarka taśmowa MBS 105 | do cięcia ukośnego | 850 W",
     "CatalogNumber": "MEK_3630105",
     "Weight": "41,000",
     "Producer": "METALLKRAFT",
@@ -169,7 +169,7 @@
   },
   {
     "ProductId": 65630,
-    "Name": "Przecinarka taśmowa MBS 125 do metalu | do cięcia ukośnego | 1200 W - METALLKRAFT 3630125",
+    "Name": "Przecinarka taśmowa MBS 125 do cięcia ukośnego | 1200 W",
     "CatalogNumber": "MEK_3630125",
     "Weight": "41,000",
     "Producer": "METALLKRAFT",
@@ -183,7 +183,7 @@
   },
   {
     "ProductId": 65631,
-    "Name": "Przecinarka taśmowa MBS 150 do metalu | do cięcia ukośnego | 1500 W - METALLKRAFT 3630150",
+    "Name": "Przecinarka taśmowa MBS 150 do cięcia ukośnego | 1500 W",
     "CatalogNumber": "MEK_3630150",
     "Weight": "41,000",
     "Producer": "METALLKRAFT",
@@ -197,7 +197,7 @@
   },
   {
     "ProductId": 65632,
-    "Name": "Przecinarka taśmowa MBS 155 K do metalu | do cięcia ukośnego | 1500 W - METALLKRAFT 3630152",
+    "Name": "Przecinarka taśmowa MBS 155 K do cięcia ukośnego | 1500 W",
     "CatalogNumber": "MEK_3630152",
     "Weight": "91,000",
     "Producer": "METALLKRAFT",
@@ -211,7 +211,7 @@
   },
   {
     "ProductId": 65813,
-    "Name": "Przecinarka taśmowa automatyczna do metalu PTE-S 280 | 2,5 kW - FENES",
+    "Name": "Przecinarka taśmowa automatyczna PTE-S 280 | 2,5 kW",
     "CatalogNumber": "FEN_2900-000-020-015",
     "Weight": "1000,000",
     "Producer": "FENES",
@@ -225,7 +225,7 @@
   },
   {
     "ProductId": 65814,
-    "Name": "Przecinarka taśmowa automatyczna do metalu PTE-S 400 | 3,0 kW - FENES",
+    "Name": "Przecinarka taśmowa automatyczna PTE-S 400 | 3,0 kW",
     "CatalogNumber": "FEN_2900-000-020-025",
     "Weight": "1600,000",
     "Producer": "FENES",
