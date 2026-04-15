@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
+import rawSaws from '../data/converted22.json'
 
-export default function useProducts(jsonPath = '/converted22.json') {
-  const [saws, setsaws] = useState([]);
+  /*  const [saws, setsaws] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+*/
+  /*
   useEffect(() => {
     let isMounted = true; // zabezpieczenie przed aktualizacją po odmontowaniu
 
@@ -27,6 +28,19 @@ export default function useProducts(jsonPath = '/converted22.json') {
       isMounted = false; // cleanup
     };
   }, [jsonPath]);
+*/
 
-  return { saws, loading, error };
+
+  const saws = rawSaws.map((p, index) => ({
+    ...p,
+    id: `row-${index}`,
+    Length: Number(p.Length),
+    Width: Number(p.Width),
+    Thickness: Number(p.Thickness),
+    Price: Number(p.Price)
+  }));
+
+
+export default function useSaws(){
+  return { saws };
 }

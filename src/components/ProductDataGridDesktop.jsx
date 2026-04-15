@@ -21,7 +21,6 @@ export default function ProductGridDesktop({ rows }) {
         'BEST CUT M51': { bg: '#FFEBEE', border: '#E53935', text: '#B71C1C' },
         'PROFIL CUT M42': { bg: '#E8F5E9', border: '#43A047', text: '#1B5E20' },
     };
-    console.log(rows);
     const columns = [
         {
             field: "Image",

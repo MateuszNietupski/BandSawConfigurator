@@ -32,15 +32,6 @@ export default function Home({ saws, loading }) {
             if (selectedTypes.length > 0 && !selectedTypes.includes(saw.Type)) return false;
             return true;
         })
-            .map((p, index) => ({
-                ...p,
-                id: `row-${index}`,
-                Length: Number(p.Length),
-                Width: Number(p.Width),
-                Thickness: Number(p.Thickness),
-                Price: Number(p.Price)
-            }));
-        ;
     }, [selectedMachine, selectedTypes, machines]);
 
     const handleSelectMachine = (machine) => {
@@ -54,6 +45,7 @@ export default function Home({ saws, loading }) {
 
     const handleShowMachines = () => {
         setViewMode('machines');
+        setSelectedManufacturers([]);
     };
 
     const handleShowSaws = () => {
@@ -69,10 +61,6 @@ export default function Home({ saws, loading }) {
     const filteredMachines = useMemo(() => {
         if (selectedManufacturers.length === 0) return machines;
         return machines.filter((m) => selectedManufacturers.includes(m.manufacturer))
-            .map((p, index) => ({
-                ...p,
-                id: `row-${index}`,
-            }));
     }, [selectedManufacturers]);
 
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));

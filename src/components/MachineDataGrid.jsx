@@ -7,6 +7,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 const MachineDataGrid = ({ machines, onSelectMachine }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+    console.log(machines);
     const columns = [
         {
             field: 'imageUrl',
@@ -18,9 +19,17 @@ const MachineDataGrid = ({ machines, onSelectMachine }) => {
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
                     <Avatar
                         variant="rounded"
-                        src={params.value || undefined}
-                        sx={{ width: isMobile ? 48 : 100, height: isMobile ? 48 : 100, bgcolor: '#E3F2FD' }}
+                        // Avatar sam sprawdzi czy src istnieje i czy obrazek się ładuje
+                        src={params.row.imageUrl || params.row.Image}
+                        sx={{
+                            width: isMobile ? 48 : 100,
+                            height: isMobile ? 48 : 100,
+                            bgcolor: '#E3F2FD',
+                            // Dodajemy styl dla obrazka wewnątrz Avatara, żeby pasował
+                            '& img': { objectFit: 'contain', p: 0.5 }
+                        }}
                     >
+                        {/* To wyświetli się tylko jeśli src będzie puste lub obrazek nie zadziała */}
                         <PrecisionManufacturingIcon sx={{ fontSize: isMobile ? 20 : 36, color: '#90CAF9' }} />
                     </Avatar>
                 </Box>
