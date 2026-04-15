@@ -1,13 +1,21 @@
-import React from 'react';
+import { useState } from "react";
 import { DataGrid } from '@mui/x-data-grid';
-import { Box, Button, Avatar, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Button, Avatar, useMediaQuery, useTheme, Dialog, IconButton, Typography, CircularProgress, Zoom } from '@mui/material';
 import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CloseIcon from '@mui/icons-material/Close';
 
 const MachineDataGrid = ({ machines, onSelectMachine }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-    console.log(machines);
+    const [openImage, setOpenImage] = useState(null);
+    const [imgLoading, setImgLoading] = useState(true);
+    const handleOpenImage = (machine) => {
+        setImgLoading(true);
+        setOpenImage(machine);
+    };
+    const handleCloseImage = () => setOpenImage(null);
+
     const columns = [
         {
             field: 'imageUrl',
@@ -19,17 +27,20 @@ const MachineDataGrid = ({ machines, onSelectMachine }) => {
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
                     <Avatar
                         variant="rounded"
-                        // Avatar sam sprawdzi czy src istnieje i czy obrazek się ładuje
                         src={params.row.imageUrl || params.row.Image}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            const imgUrl = params.row.imageUrl || params.row.Image;
+                            if (imgUrl) handleOpenImage(params.row); 
+                        }}
                         sx={{
                             width: isMobile ? 48 : 100,
                             height: isMobile ? 48 : 100,
                             bgcolor: '#E3F2FD',
-                            // Dodajemy styl dla obrazka wewnątrz Avatara, żeby pasował
+                            cursor: params.row.imageUrl ? 'zoom-in' : 'default',
                             '& img': { objectFit: 'contain', p: 0.5 }
                         }}
                     >
-                        {/* To wyświetli się tylko jeśli src będzie puste lub obrazek nie zadziała */}
                         <PrecisionManufacturingIcon sx={{ fontSize: isMobile ? 20 : 36, color: '#90CAF9' }} />
                     </Avatar>
                 </Box>
@@ -45,10 +56,10 @@ const MachineDataGrid = ({ machines, onSelectMachine }) => {
                     fontSize: isMobile ? 11 : 14,
                     fontWeight: 600,
                     lineHeight: 1.2,
-                    whiteSpace: 'normal', // Pozwala na zawijanie tekstu
-                    wordBreak: 'break-word', // Rozbija długie słowa, jeśli to konieczne
+                    whiteSpace: 'normal',
+                    wordBreak: 'break-word',
                     display: '-webkit-box',
-                    WebkitLineClamp: 3, // Ogranicza do np. 3 linii (opcjonalnie)
+                    WebkitLineClamp: 3,
                     WebkitBoxOrient: 'vertical',
                     overflow: 'hidden',
                 }}>
@@ -132,6 +143,82 @@ const MachineDataGrid = ({ machines, onSelectMachine }) => {
                     },
                 }}
             />
+            <Dialog
+                open={Boolean(openImage)}
+                onClose={handleCloseImage}
+                maxWidth="md"
+                fullWidth={false}
+                TransitionComponent={Zoom}
+                PaperProps={{
+                    sx: {
+                        bgcolor: 'transparent',
+                        boxShadow: 'none',
+                        overflow: 'visible',
+                    }
+                }}
+            >
+                <Box sx={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <IconButton
+                        onClick={handleCloseImage}
+                        sx={{
+                            position: 'absolute',
+                            top: 8,
+                            right: 8,
+                            zIndex: 1,
+                            bgcolor: 'rgba(0,0,0,0.5)',
+                            color: 'white',
+                            '&:hover': { bgcolor: 'rgba(0, 0, 0, 0.7)' }
+                        }}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                    {imgLoading && (
+                        <Box sx={{
+                            position: 'absolute',
+                            inset: 0,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}>
+                            <CircularProgress />
+                        </Box>
+                    )}
+                    <img
+                        src={openImage?.imageUrl || openImage?.Image}
+                        alt={openImage?.name || 'Podgląd maszyny'}
+                        onLoad={() => setImgLoading(false)}
+                        onError={() => setImgLoading(false)}
+                        style={{
+                            maxWidth: '95vw',
+                            maxHeight: '80vh',
+                            objectFit: 'contain',
+                            borderRadius: '8px',
+                            backgroundColor: '#fff',
+                            padding: '10px',
+                            display: imgLoading ? 'none' : 'block',
+                            transition: 'opacity 0.3s ease',
+                        }}
+                    />
+                    {openImage?.name && (
+                        <Typography
+                            variant="subtitle1"
+                            sx={{
+                                mt: 1,
+                                px: 2,
+                                py: 0.5,
+                                bgcolor: '#0e2135',
+                                color: '#fff',
+                                borderRadius: 1,
+                                fontWeight: 600,
+                                textAlign: 'center',
+                                maxWidth: '90vw',
+                            }}
+                        >
+                            {openImage.name}
+                        </Typography>
+                    )}
+                </Box>
+            </Dialog>
         </Box>
     );
 };
