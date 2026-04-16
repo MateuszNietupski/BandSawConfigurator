@@ -1,14 +1,22 @@
 import React, { useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Box, Button, Tooltip, Chip } from "@mui/material";
+import { Box, Button, Avatar, useMediaQuery, useTheme, Dialog, Tooltip, Chip, IconButton, Typography, CircularProgress, Zoom } from '@mui/material';
 import StorefrontIcon from '@mui/icons-material/Storefront';
+import { plPL } from '@mui/x-data-grid/locales';
+import CloseIcon from '@mui/icons-material/Close';
+import CustomNoRowsOverlay from './CustomNoRowsOverlay'
 
+export default function ProductGridDesktop({ rows, selectedMachine }) {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+    const [openImage, setOpenImage] = useState(null);
+    const [imgLoading, setImgLoading] = useState(true);
+    const handleOpenImage = (rows) => {
+        setImgLoading(true);
+        setOpenImage(rows);
+    };
+    const handleCloseImage = () => setOpenImage(null);
 
-export default function ProductGridDesktop({ rows }) {
-    const [paginationModel, setPaginationModel] = React.useState({
-        pageSize: 10,
-        page: 0,
-    });
 
     const typeDescriptions = {
         'OPTI CUT M42': 'Uniwersalna piła bimetalowa M42. Optymalna do cięcia stali konstrukcyjnych, profili i prętów. Dobry stosunek ceny do wydajności.',
@@ -27,18 +35,28 @@ export default function ProductGridDesktop({ rows }) {
             headerName: "Piła taśmowa",
             flex: 1.5,
             sortable: false,
+            width: isMobile ? 58 : 116,
+
             headerAlign: 'center',
             align: 'center',
-            minWidth: 100,
+            cellClassName: 'no-focus-cell',
             renderCell: (params) => (
-                <Box>
-
-                    <img
-                        src={params.row.Image}
-                        alt={params.value}
-                        style={{ width: 100, height: 100, objectFit: "contain", display: "block" }}
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                    <Avatar
+                        variant="rounded"
+                        src={params.row.imageUrl || params.row.Image}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            const imgUrl = params.row.imageUrl || params.row.Image;
+                            if (imgUrl) handleOpenImage(params.row);
+                        }}
+                        sx={{
+                            width: isMobile ? 48 : 100,
+                            height: isMobile ? 48 : 100,
+                            cursor: params.row.Image ? 'zoom-in' : 'default',
+                            '& img': { objectFit: 'contain', p: 0 }
+                        }}
                     />
-
                 </Box>
             ),
         },
@@ -123,6 +141,9 @@ export default function ProductGridDesktop({ rows }) {
         }
     ];
 
+    if (!rows || rows.length === 0) {
+    }
+
     return (
         <Box sx={{ width: "100%", width: '100%' }}>
             <DataGrid
@@ -136,7 +157,14 @@ export default function ProductGridDesktop({ rows }) {
                 }}
                 pageSizeOptions={[5, 10, 20, 50]}
                 disableRowSelectionOnClick
+                localeText={plPL.components.MuiDataGrid.defaultProps.localeText}
+                slots={{
+                    noRowsOverlay: () => <CustomNoRowsOverlay selectedMachine={selectedMachine} />,
+                }}
                 sx={{
+                    '& .no-focus-cell:focus, & .no-focus-cell:focus-within': {
+                        outline: 'none !important',
+                    },
                     border: 'none',
                     '& .MuiDataGrid-columnHeaders': {
                         bgcolor: 'action.hover',
@@ -149,8 +177,85 @@ export default function ProductGridDesktop({ rows }) {
                         display: 'flex',
                         alignItems: 'center',
                     },
+                    minHeight: 400
                 }}
             />
+            <Dialog
+                open={Boolean(openImage)}
+                onClose={handleCloseImage}
+                maxWidth="md"
+                fullWidth={false}
+                TransitionComponent={Zoom}
+                PaperProps={{
+                    sx: {
+                        bgcolor: 'transparent',
+                        boxShadow: 'none',
+                        overflow: 'visible',
+                    }
+                }}
+            >
+                <Box sx={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <IconButton
+                        onClick={handleCloseImage}
+                        sx={{
+                            position: 'absolute',
+                            top: 8,
+                            right: 8,
+                            zIndex: 1,
+                            bgcolor: 'rgba(0,0,0,0.5)',
+                            color: 'white',
+                            '&:hover': { bgcolor: 'rgba(0, 0, 0, 0.7)' }
+                        }}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                    {imgLoading && (
+                        <Box sx={{
+                            position: 'absolute',
+                            inset: 0,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}>
+                            <CircularProgress />
+                        </Box>
+                    )}
+                    <img
+                        src={openImage?.imageUrl || openImage?.Image}
+                        alt={openImage?.name || 'Podgląd maszyny'}
+                        onLoad={() => setImgLoading(false)}
+                        onError={() => setImgLoading(false)}
+                        style={{
+                            maxWidth: '95vw',
+                            maxHeight: '80vh',
+                            objectFit: 'contain',
+                            borderRadius: '8px',
+                            backgroundColor: '#fff',
+                            padding: '10px',
+                            display: imgLoading ? 'none' : 'block',
+                            transition: 'opacity 0.3s ease',
+                        }}
+                    />
+                    {openImage?.Title && (
+                        <Typography
+                            variant="subtitle1"
+                            sx={{
+                                mt: 1,
+                                px: 2,
+                                py: 0.5,
+                                bgcolor: '#0e2135',
+                                color: '#fff',
+                                borderRadius: 1,
+                                fontWeight: 600,
+                                textAlign: 'center',
+                                maxWidth: '90vw',
+                            }}
+                        >
+                            {openImage.Title}
+                        </Typography>
+                    )}
+                </Box>
+            </Dialog>
         </Box>
     );
 }

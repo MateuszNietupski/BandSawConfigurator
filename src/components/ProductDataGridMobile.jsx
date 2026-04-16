@@ -11,7 +11,7 @@ export default function ProductDataGridMobile({ rows }) {
             field: "product",
             headerName: "Produkt",
             flex: 1,
-            minWidth: 250,
+            minWidth: 150,
             sortable: false,
             filterable: false,
             renderCell: (params) => <ProductCardCell product={params.row} mobile />,

@@ -13,7 +13,6 @@ import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturi
 
 export default function Home({ saws, loading }) {
     const theme = useTheme();
-    const [selectedMachines, setSelectedMachines] = useState([]);
     const { machines } = useMachines();
     const [viewMode, setViewMode] = useState('saws'); // 'saws' | 'machines'
     const [selectedMachine, setSelectedMachine] = useState(null);
@@ -138,8 +137,12 @@ export default function Home({ saws, loading }) {
         </Box>
     ); if (loading) return <CircularProgress />;
     return (
-        <>
-            <Box sx={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', height: 'auto', overflow: 'hidden' }}>
+        <Box sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            minHeight: '100vh'
+        }}>
+            <Box sx={{ display: 'flex', flex: 1, flexDirection: isMobile ? 'column' : 'row', height: 'auto', overflow: 'hidden' }}>
                 {!isMobile && <FilterPanel {...filterProps} />}
 
                 <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
@@ -164,12 +167,15 @@ export default function Home({ saws, loading }) {
                         {viewMode === 'machines' ? (
                             <MachineDataGrid machines={filteredMachines} onSelectMachine={handleSelectMachine} />
                         ) : (
-                            <ProductGridDesktop rows={filteredSaws} />
+                            <ProductGridDesktop
+                                rows={filteredSaws}
+                                selectedMachine={selectedMachine}
+                            />
                         )}
                     </Box>
                 </Box>
             </Box>
             <Footer />
-        </>
+        </Box>
     )
 }

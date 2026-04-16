@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { DataGrid } from '@mui/x-data-grid';
+import { plPL } from '@mui/x-data-grid/locales';
 import { Box, Button, Avatar, useMediaQuery, useTheme, Dialog, IconButton, Typography, CircularProgress, Zoom } from '@mui/material';
 import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -23,6 +24,8 @@ const MachineDataGrid = ({ machines, onSelectMachine }) => {
             width: isMobile ? 58 : 116,
             sortable: false,
             filterable: false,
+            cellClassName: 'no-focus-cell',
+
             renderCell: (params) => (
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
                     <Avatar
@@ -31,14 +34,13 @@ const MachineDataGrid = ({ machines, onSelectMachine }) => {
                         onClick={(e) => {
                             e.stopPropagation();
                             const imgUrl = params.row.imageUrl || params.row.Image;
-                            if (imgUrl) handleOpenImage(params.row); 
+                            if (imgUrl) handleOpenImage(params.row);
                         }}
                         sx={{
                             width: isMobile ? 48 : 100,
                             height: isMobile ? 48 : 100,
-                            bgcolor: '#E3F2FD',
                             cursor: params.row.imageUrl ? 'zoom-in' : 'default',
-                            '& img': { objectFit: 'contain', p: 0.5 }
+                            '& img': { objectFit: 'contain', p: 0 }
                         }}
                     >
                         <PrecisionManufacturingIcon sx={{ fontSize: isMobile ? 20 : 36, color: '#90CAF9' }} />
@@ -50,6 +52,7 @@ const MachineDataGrid = ({ machines, onSelectMachine }) => {
             field: 'name',
             headerName: 'Nazwa maszyny',
             flex: 2,
+            
             minWidth: isMobile ? 100 : 200,
             renderCell: (params) => (
                 <Box sx={{
@@ -75,7 +78,7 @@ const MachineDataGrid = ({ machines, onSelectMachine }) => {
             headerAlign: 'center',
             minWidth: isMobile ? 70 : 100,
             renderCell: (params) => (
-                <Box sx={{ fontSize: isMobile ? 10 : 12, fontWeight: 600, lineHeight: 1.3 }}>
+                <Box sx={{ fontSize: isMobile ? 11 : 16, fontWeight: 600, lineHeight: 1.3 }}>
                     {params.value}
                 </Box>
             ),
@@ -119,12 +122,18 @@ const MachineDataGrid = ({ machines, onSelectMachine }) => {
                 rowHeight={isMobile ? 60 : 80}
                 pageSizeOptions={[5, 10, 20, 50]}
                 initialState={{
-                    pagination: { paginationModel: { pageSize: 10 } },
+                    pagination: { paginationModel: { pageSize: 5 }, },
                     sorting: { sortModel: [{ field: 'name', sort: 'asc' }] },
                 }}
                 disableRowSelectionOnClick
                 disableColumnMenu
+                localeText={plPL.components.MuiDataGrid.defaultProps.localeText}
+
                 sx={{
+
+                    '& .no-focus-cell:focus, & .no-focus-cell:focus-within': {
+                        outline: 'none !important',
+                    },
                     border: 'none',
                     fontSize: isMobile ? 11 : 14,
                     '& .MuiDataGrid-columnHeaders': {

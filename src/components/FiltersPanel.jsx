@@ -20,31 +20,6 @@ import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
 import CancelIcon from '@mui/icons-material/Cancel';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 
-const MachineSelect = ({ machines, selectedMachines, onMachinesChange, size, labelId }) => (
-    <Select
-        labelId={labelId}
-        multiple
-        value={selectedMachines}
-        onChange={(e) => onMachinesChange(e.target.value)}
-        input={<OutlinedInput label="Maszyna" />}
-        renderValue={(selected) => (
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                {selected.map((id) => {
-                    const machine = machines.find((m) => m.id === id);
-                    return <Chip key={id} label={machine?.name ?? id} size="small" />;
-                })}
-            </Box>
-        )}
-    >
-        {machines.map((machine) => (
-            <MenuItem key={machine.id} value={machine.id}>
-                <Checkbox checked={selectedMachines.includes(machine.id)} size={size} />
-                <ListItemText primary={machine.name} secondary={machine.manufacturer} />
-            </MenuItem>
-        ))}
-    </Select>
-);
-
 const ClearButton = ({ onClick, size = 'small' }) => (
     <Button size={size} startIcon={<FilterAltOffIcon />} onClick={onClick} color="inherit" sx={{ whiteSpace: 'nowrap' }}>
         Wyczyść
@@ -179,7 +154,7 @@ const FilterPanel = ({
         <Box
             sx={{
                 width: 280, minWidth: 280, display: 'flex', flexDirection: 'column',
-                borderRight: '1px solid', borderColor: 'divider', height: '100vh', bgcolor: 'background.paper',
+                borderRight: '1px solid', borderColor: 'divider', height: 'auto', bgcolor: 'background.paper',
             }}
         >
             <Box sx={{ p: 2.5, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1, borderBottom: '1px solid', borderColor: 'divider' }}>
