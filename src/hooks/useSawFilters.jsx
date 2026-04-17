@@ -31,12 +31,13 @@ export function useSawFilters(saws, machines) {
                 if (!compatible.includes(selectedMachine.id)) return false;
             }
             if (selectedTypes.length > 0 && !selectedTypes.includes(saw.Type)) return false;
+            if (selectedTpi.length > 0 && !selectedTpi.includes(saw.Tpi)) return false;
             return true;
         });
 
         const unique = [...new Set(available.map((s) => Number(s.Length)))].sort((a, b) => a - b);
         return unique.length > 0 ? unique : [0];
-    }, [saws, selectedMachine, selectedTypes, machines]);
+    }, [saws, selectedMachine, selectedTypes, selectedTpi, machines]);
 
     // Reset suwaka przy zmianie dostępnych kroków
     useEffect(() => {
