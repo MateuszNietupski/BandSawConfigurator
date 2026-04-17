@@ -40,6 +40,11 @@ export default function ProductGridDesktop({ rows, selectedMachine }) {
                             const imgUrl = params.row.imageUrl || params.row.Image;
                             if (imgUrl) handleOpenImage(params.row);
                         }}
+                        slotProps={{
+                            img: {
+                                loading: 'lazy',
+                            },
+                        }}
                         sx={{
                             width: isMobile ? 48 : 100,
                             height: isMobile ? 48 : 100,
@@ -89,54 +94,53 @@ export default function ProductGridDesktop({ rows, selectedMachine }) {
             headerAlign: 'center',
             align: 'center',
             minWidth: 70,
-            valueGetter: (value, row) => {
-                const raw = row.Tpi;
-                if (!raw) return 0;
 
-                // Wyciągamy pierwszą liczbę przed znakiem "/"
-                const firstNum = parseFloat(raw.split('/')[0]);
+            sortComparator: (v1, v2) => {
+                const parseTpi = (val) => {
+                    if (!val) return [0, 0];
+                    const parts = String(val).split('/').map(num => parseFloat(num) || 0);
+                    return parts.length === 1 ? [parts[0], 0] : parts;
+                };
+                const [min1, max1] = parseTpi(v1);
+                const [min2, max2] = parseTpi(v2);
 
-                return isNaN(firstNum) ? 0 : firstNum;
+                if (min1 !== min2) {
+                    return min1 - min2;
+                }
+                return max1 - max2;
             },
             renderCell: (params) => {
-                const tpiValue = params.row.Tpi ?? '';
+                const tpiValue = params.value ?? '';
+                const hint = getTpiHint(tpiValue);
+                if (!hint) return <Typography variant="body2">{tpiValue}</Typography>;
+
                 return (
-            <Tooltip 
-                title={getTpiHint(tpiValue)} 
-                arrow 
-                placement="top"
-                componentsProps={{
-                    tooltip: {
-                        sx: {
-                            // Stylizacja tła i tekstu
-                            bgcolor: '#f0f7ff', // Bardzo jasny błękitny
-                            color: '#0e2135',   // Twój kolor main (granat) jako tekst
-                            border: '1px solid #d0e2f2',
-                            boxShadow: '0px 2px 8px rgba(0,0,0,0.1)',
-                            fontSize: '0.75rem',
-                            fontWeight: 500,
-                            '& .MuiTooltip-arrow': {
-                                color: '#f0f7ff',
-                                '&::before': { border: '1px solid #d0e2f2' }
+                    <Tooltip
+                        title={hint}
+                        arrow
+                        placement="top"
+                        slotProps={{
+                            tooltip: {
+                                sx: {
+                                    bgcolor: '#f0f7ff',
+                                    color: '#0e2135',
+                                    border: '1px solid #d0e2f2',
+                                    boxShadow: '0px 2px 8px rgba(0,0,0,0.1)',
+                                    fontSize: '0.75rem',
+                                    fontWeight: 500,
+                                    '& .MuiTooltip-arrow': {
+                                        color: '#f0f7ff',
+                                        '&::before': { border: '1px solid #d0e2f2' }
+                                    }
+                                }
                             }
-                        }
-                    }
-                }}
-            >
-                <Box sx={{ 
-                    fontWeight: 700, 
-                    cursor: 'help',
-                    width: '100%',
-                    textAlign: 'center',
-                    // Dodajemy subtelne tło dla samej komórki, by wyróżnić TPI
-                    py: 0.5,
-                    borderRadius: 1,
-                    '&:hover': { bgcolor: 'rgba(14, 33, 53, 0.04)' }
-                }}>
-                    {tpiValue}
-                </Box>
-            </Tooltip>
-        );
+                        }}
+                    >
+                        <Typography variant="body2" sx={{ cursor: 'help' }}>
+                            {tpiValue}
+                        </Typography>
+                    </Tooltip>
+                );
             }
         },
         {

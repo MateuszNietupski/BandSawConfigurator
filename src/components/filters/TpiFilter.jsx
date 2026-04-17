@@ -1,11 +1,11 @@
 import React from 'react';
 import {
     FormControl, InputLabel, Select, MenuItem, Box,
-    Chip, OutlinedInput, Checkbox, ListItemText, Typography
+    Chip, OutlinedInput, Checkbox, ListItemText, Typography,
 } from '@mui/material';
 import { getTpiHint } from '../../utils/sawConst';
 
-const TpiFilter = ({ value, options, onChange, size = "medium" }) => (
+const TpiFilter = ({ value, options, onChange, size = 'medium' }) => (
     <FormControl fullWidth size={size}>
         <InputLabel id="tpi-select-label">Podziałka (TPI)</InputLabel>
         <Select
@@ -21,29 +21,63 @@ const TpiFilter = ({ value, options, onChange, size = "medium" }) => (
                     ))}
                 </Box>
             )}
+            MenuProps={{
+                PaperProps: { sx: { maxHeight: 360 } },
+            }}
         >
-            {options.map((tpi) => (
-                <MenuItem key={tpi} value={tpi} sx={{ flexDirection: 'column', alignItems: 'flex-start', py: 1 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-                        <Checkbox checked={value.includes(tpi)} size="small" />
-                        <ListItemText 
-                            primary={<strong>{tpi} TPI</strong>} 
-                            secondaryTypographyProps={{ fontSize: '0.7rem' }}
-                        />
-                    </Box>
-                    <Typography
-                        variant="caption"
+            {options.map((tpi) => {
+                const hint = getTpiHint(tpi);
+                return (
+                    <MenuItem
+                        key={tpi}
+                        value={tpi}
                         sx={{
-                            ml: 4, px: 0.8, py: 0.2,
-                            bgcolor: '#f0f7ff', color: '#0e2135',
-                            borderRadius: '4px', fontSize: '0.7rem',
-                            border: '1px solid #d0e2f2'
+                            py: 0.5,
+                            minHeight: 'auto',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 1,
                         }}
                     >
-                        {getTpiHint(tpi)}
-                    </Typography>
-                </MenuItem>
-            ))}
+                        <Checkbox
+                            checked={value.includes(tpi)}
+                            size="small"
+                            sx={{ p: 0.5 }}
+                        />
+                        <ListItemText
+                            primary={
+                                <Typography variant="body2" fontWeight={700} sx={{ lineHeight: 1.2 }}>
+                                    {tpi} TPI
+                                </Typography>
+                            }
+                            sx={{ m: 0, flex: '0 0 auto', minWidth: 56 }}
+                        />
+                        {hint && (
+                            <Typography
+                                variant="caption"
+                                title={hint}
+                                sx={{
+                                    flex: 1,
+                                    px: 0.75,
+                                    py: 0.25,
+                                    bgcolor: 'primary.50',
+                                    color: 'primary.dark',
+                                    border: '1px solid',
+                                    borderColor: 'primary.100',
+                                    borderRadius: 0.75,
+                                    fontSize: '0.7rem',
+                                    lineHeight: 1.3,
+                                    whiteSpace: 'nowrap',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                }}
+                            >
+                                {hint}
+                            </Typography>
+                        )}
+                    </MenuItem>
+                );
+            })}
         </Select>
     </FormControl>
 );

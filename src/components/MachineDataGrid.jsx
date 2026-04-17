@@ -36,6 +36,11 @@ const MachineDataGrid = ({ machines, onSelectMachine }) => {
                             const imgUrl = params.row.imageUrl || params.row.Image;
                             if (imgUrl) handleOpenImage(params.row);
                         }}
+                        slotProps={{
+                            img: {
+                                loading: 'lazy',
+                            },
+                        }}
                         sx={{
                             width: isMobile ? 48 : 100,
                             height: isMobile ? 48 : 100,
@@ -52,7 +57,7 @@ const MachineDataGrid = ({ machines, onSelectMachine }) => {
             field: 'name',
             headerName: 'Nazwa maszyny',
             flex: 2,
-            
+
             minWidth: isMobile ? 100 : 200,
             renderCell: (params) => (
                 <Box sx={{
