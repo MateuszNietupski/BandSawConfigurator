@@ -5,30 +5,20 @@ import StorefrontIcon from '@mui/icons-material/Storefront';
 import { plPL } from '@mui/x-data-grid/locales';
 import CloseIcon from '@mui/icons-material/Close';
 import CustomNoRowsOverlay from './CustomNoRowsOverlay'
+import { typeDescriptions, typeColors, getTpiHint } from "../utils/sawConst";
 
 export default function ProductGridDesktop({ rows, selectedMachine }) {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
     const [openImage, setOpenImage] = useState(null);
     const [imgLoading, setImgLoading] = useState(true);
+
     const handleOpenImage = (rows) => {
         setImgLoading(true);
         setOpenImage(rows);
     };
     const handleCloseImage = () => setOpenImage(null);
 
-
-    const typeDescriptions = {
-        'OPTI CUT M42': 'Uniwersalna piła bimetalowa M42. Optymalna do cięcia stali konstrukcyjnych, profili i prętów. Dobry stosunek ceny do wydajności.',
-        'BEST CUT M51': 'Wysokowydajna piła bimetalowa M51. Do stali trudnoobrabialnych, stopowych i nierdzewnych. Zwiększona trwałość i odporność na ciepło.',
-        'PROFIL CUT M42': 'Piła bimetalowa M42 do cięcia profili i rur cienkościennych. Zmienny podziałka zębów zapewnia czyste cięcie bez drgań.',
-    };
-
-    const typeColors = {
-        'OPTI CUT M42': { bg: '#FFF3E0', border: '#FB8C00', text: '#E65100' },
-        'BEST CUT M51': { bg: '#FFEBEE', border: '#E53935', text: '#B71C1C' },
-        'PROFIL CUT M42': { bg: '#E8F5E9', border: '#43A047', text: '#1B5E20' },
-    };
     const columns = [
         {
             field: "Image",
@@ -60,7 +50,6 @@ export default function ProductGridDesktop({ rows, selectedMachine }) {
                 </Box>
             ),
         },
-
         {
             field: 'Type',
             headerName: 'Typ',
@@ -102,12 +91,53 @@ export default function ProductGridDesktop({ rows, selectedMachine }) {
             minWidth: 70,
             valueGetter: (value, row) => {
                 const raw = row.Tpi;
-                if (!raw) return null;
-                const [num, den] = raw.split('/').map(Number);
-                if (!den || isNaN(num) || isNaN(den)) return null;
-                return num / den;
+                if (!raw) return 0;
+
+                // Wyciągamy pierwszą liczbę przed znakiem "/"
+                const firstNum = parseFloat(raw.split('/')[0]);
+
+                return isNaN(firstNum) ? 0 : firstNum;
             },
-            renderCell: (params) => params.row.Tpi ?? ''
+            renderCell: (params) => {
+                const tpiValue = params.row.Tpi ?? '';
+                return (
+            <Tooltip 
+                title={getTpiHint(tpiValue)} 
+                arrow 
+                placement="top"
+                componentsProps={{
+                    tooltip: {
+                        sx: {
+                            // Stylizacja tła i tekstu
+                            bgcolor: '#f0f7ff', // Bardzo jasny błękitny
+                            color: '#0e2135',   // Twój kolor main (granat) jako tekst
+                            border: '1px solid #d0e2f2',
+                            boxShadow: '0px 2px 8px rgba(0,0,0,0.1)',
+                            fontSize: '0.75rem',
+                            fontWeight: 500,
+                            '& .MuiTooltip-arrow': {
+                                color: '#f0f7ff',
+                                '&::before': { border: '1px solid #d0e2f2' }
+                            }
+                        }
+                    }
+                }}
+            >
+                <Box sx={{ 
+                    fontWeight: 700, 
+                    cursor: 'help',
+                    width: '100%',
+                    textAlign: 'center',
+                    // Dodajemy subtelne tło dla samej komórki, by wyróżnić TPI
+                    py: 0.5,
+                    borderRadius: 1,
+                    '&:hover': { bgcolor: 'rgba(14, 33, 53, 0.04)' }
+                }}>
+                    {tpiValue}
+                </Box>
+            </Tooltip>
+        );
+            }
         },
         {
             field: 'Title_URL',

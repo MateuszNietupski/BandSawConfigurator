@@ -17,12 +17,14 @@ export default function Home({ saws, loading }) {
     const { state, results, handlers } = useSawFilters(saws, machines);
 
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+    console.log(saws);
 
     const filterProps = {
         // Dane do list
         sawTypes: results.sawTypes,
         manufacturers: results.manufacturers,
         lengthSteps: state.lengthSteps,
+        tpiOptions: results.tpiOptions,
         
         // Aktualne wartości stanów (z hooka!)
         selectedTypes: state.selectedTypes,
@@ -30,6 +32,8 @@ export default function Home({ saws, loading }) {
         selectedManufacturers: state.selectedManufacturers,
         lengthRange: state.lengthRange,
         viewMode: state.viewMode,
+        selectedTpi: state.selectedTpi,
+        onTpiChange: handlers.setSelectedTpi,
 
         // Funkcje zmieniające stany (z hooka!)
         onTypesChange: handlers.setSelectedTypes,

@@ -7,10 +7,21 @@ export function useSawFilters(saws, machines) {
     const [selectedTypes, setSelectedTypes] = useState([]);
     const [selectedManufacturers, setSelectedManufacturers] = useState([]);
     const [lengthRange, setLengthRange] = useState([0, 0]);
+    const [selectedTpi, setSelectedTpi] = useState([]);
 
     // --- DANE POMOCNICZE (Opcje w filtrach) ---
     const sawTypes = useMemo(() => [...new Set(saws.map((s) => s.Type))].sort(), [saws]);
     const manufacturers = useMemo(() => [...new Set(machines.map((m) => m.manufacturer))].sort(), [machines]);
+    const tpiOptions = useMemo(() => {
+        const rawValues = saws.map((s) => String(s.Tpi || "").trim());
+        const unique = [...new Set(rawValues)].filter(Boolean);
+
+        return unique.sort((a, b) => {
+            const valA = parseFloat(a);
+            const valB = parseFloat(b);
+            return valA - valB;
+        });
+    }, [saws]);
 
     // --- LOGIKA SUWAKA (KROKI) ---
     const lengthSteps = useMemo(() => {
@@ -40,14 +51,17 @@ export function useSawFilters(saws, machines) {
                 if (!compatible.includes(selectedMachine.id)) return false;
             }
             if (selectedTypes.length > 0 && !selectedTypes.includes(saw.Type)) return false;
+            if (selectedTpi.length > 0 && !selectedTpi.includes(saw.Tpi)) return false;
+
             const currentLen = Number(saw.Length);
             const minVal = lengthSteps[lengthRange[0]];
             const maxVal = lengthSteps[lengthRange[1]];
             if (currentLen < minVal || currentLen > maxVal) return false;
 
             return true;
+
         });
-    }, [saws, selectedMachine, selectedTypes, lengthRange, lengthSteps, machines]);
+    }, [saws, selectedMachine, selectedTypes, selectedTpi, lengthRange, lengthSteps, machines]);
 
     const filteredMachines = useMemo(() => {
         if (selectedManufacturers.length === 0) return machines;
@@ -69,18 +83,21 @@ export function useSawFilters(saws, machines) {
             setSelectedMachine(null);
             setSelectedTypes([]);
             setSelectedManufacturers([]);
+            setSelectedTpi([]);
         },
         setSelectedTypes,
         setSelectedManufacturers,
-        setLengthRange
+        setLengthRange,
+        setSelectedTpi
     };
 
     return {
-        state: { 
-            viewMode, selectedMachine, selectedTypes, 
-            selectedManufacturers, lengthRange, lengthSteps 
+        state: {
+            viewMode, selectedMachine, selectedTypes,
+            selectedManufacturers, lengthRange, lengthSteps,
+            selectedTpi, tpiOptions
         },
-        results: { filteredSaws, filteredMachines, sawTypes, manufacturers },
+        results: { filteredSaws, filteredMachines, sawTypes, manufacturers, tpiOptions },
         handlers
     };
 }

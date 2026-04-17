@@ -1,7 +1,6 @@
-import { Slider, Box, Typography } from '@mui/material';
+import { Slider, Box, Typography, Chip } from '@mui/material';
 
-export default function LengthFilter({ steps, range, onChange }) {
-    // Zabezpieczenie na wypadek, gdyby tablica steps była pusta
+export default function LengthFilter({ steps, range, onChange, isMachineSelected }) {
     if (!steps || steps.length === 0) return null;
 
     const handleChange = (event, newValue) => {
@@ -12,14 +11,34 @@ export default function LengthFilter({ steps, range, onChange }) {
         return steps[index] ? `${steps[index]} mm` : '';
     };
 
+    if (steps.length === 1 && isMachineSelected) {
+        return (
+            <Box sx={{ px: 2, mt: 2, mb: 2 }}>
+                <Typography variant="caption" fontWeight={700} color="text.secondary" sx={{ display: 'block', mb: 1 }}>
+                    DŁUGOŚĆ PIŁY (MM)
+                </Typography>
+                <Chip
+                    label={`${steps[0]} mm`}
+                    color="primary"
+                    variant="filled"
+                    size="small"
+                    sx={{ fontWeight: 600, width: '100%', borderRadius: 1 }}
+                />
+                <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block', fontStyle: 'italic' }}>
+                    Wymiar stały dla wybranej maszyny.
+                </Typography>
+            </Box>
+        );
+    }
+
     return (
-        <Box sx={{ 
-            px: 4, // To kluczowy odstęp, który chroni dymki przed ucinaniem
-            mt: 3, 
-            width: '100%', 
-            boxSizing: 'border-box' 
+        <Box sx={{
+            px: 4,
+            mt: 3,
+            width: '100%',
+            boxSizing: 'border-box'
         }}>
-            
+            <Typography variant="caption" fontWeight={700} sx={{ display: 'block', mb: 1 }}>DŁUGOŚĆ PIŁY (MM)</Typography>
             <Slider
                 value={range}
                 onChange={handleChange}
@@ -35,10 +54,8 @@ export default function LengthFilter({ steps, range, onChange }) {
                 sx={{
                     '& .MuiSlider-valueLabel': {
                         bgcolor: 'primary.main',
-                        // Opcjonalnie: upewniamy się, że z-index dymka jest wysoki
-                        zIndex: 1000, 
+                        zIndex: 1000,
                     },
-                    // Poprawka dla labeli "marks" (tych na końcach), żeby nie wystawały
                     '& .MuiSlider-markLabel[data-index="0"]': {
                         transform: 'translateX(0%)',
                     },
@@ -47,7 +64,7 @@ export default function LengthFilter({ steps, range, onChange }) {
                     },
                 }}
             />
-            
+
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1 }}>
                 <Typography variant="caption" color="text.secondary">
                     Od: <strong>{steps[range[0]]} mm</strong>

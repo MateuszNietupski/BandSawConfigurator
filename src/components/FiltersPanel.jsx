@@ -6,9 +6,8 @@ import {
 } from '@mui/material';
 import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
 import ListAltIcon from '@mui/icons-material/ListAlt';
-import LengthFilter from './LengthFilter.jsx'
-
-// --- PODKOMPONENTY POMOCNICZE ---
+import LengthFilter from './filters/LengthFilter.jsx'
+import TpiFilter from './filters/TpiFilter.jsx';
 
 const ClearButton = ({ onClick, size = 'small', label = "Wyczyść" }) => (
     <Button
@@ -31,8 +30,6 @@ const SectionTitle = ({ children, extra }) => (
     </Box>
 );
 
-// --- GŁÓWNY KOMPONENT ---
-
 const FilterPanel = ({
     sawTypes,
     selectedTypes,
@@ -48,16 +45,14 @@ const FilterPanel = ({
     onManufacturersChange,
     lengthSteps,
     lengthRange,
-    onLengthChange
+    onLengthChange,
+    selectedTpi = [],
+    tpiOptions = [],
+    onTpiChange
 }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
     const isMachineView = viewMode === 'machines';
-
-    const handleSliderChange = (event, newValue) => onLengthChange(newValue);
-    const valueLabelFormat = (index) => lengthSteps[index] ? `${lengthSteps[index]} mm` : "";
-
-    // --- RENDERERY SEKCJI ---
 
     const renderTypeFilter = (size = "medium") => (
         <FormControl fullWidth size={size}>
@@ -112,9 +107,18 @@ const FilterPanel = ({
             steps={lengthSteps}
             range={lengthRange}
             onChange={onLengthChange}
+            isMachineSelected={!!selectedMachine}
         />
     );
 
+    const renderTpiFilter = (size = "medium") => (
+        <TpiFilter
+            value={selectedTpi}
+            options={tpiOptions}
+            onChange={onTpiChange}
+            size={size}
+        />
+    );
     // --- WIDOK MOBILNY ---
     if (isMobile) {
         return (
@@ -186,7 +190,6 @@ const FilterPanel = ({
                             FILTRY PIŁ
                         </SectionTitle>
 
-                        {/* Sekcja Maszyny */}
                         <Typography variant="caption" fontWeight={700} sx={{ display: 'block', mb: 1 }}>MASZYNA</Typography>
                         {selectedMachine ? (
                             <Chip
@@ -204,14 +207,17 @@ const FilterPanel = ({
 
                         <Divider sx={{ my: 2 }} />
 
-                        {/* Sekcja Typu */}
                         <Typography variant="caption" fontWeight={700} sx={{ display: 'block', mb: 1 }}>TYP PRODUKTU</Typography>
                         {renderTypeFilter()}
 
                         <Divider sx={{ my: 2 }} />
+                        <Typography variant="caption" fontWeight={700} sx={{ display: 'block', mb: 1 }}>
+                            Liczba zębów na cal (TPI)
+                        </Typography>
+                        {renderTpiFilter()}
 
-                        {/* Sekcja Suwaka */}
-                        <Typography variant="caption" fontWeight={700} sx={{ display: 'block', mb: 1 }}>DŁUGOŚĆ PIŁY (MM)</Typography>
+                        <Divider sx={{ my: 2 }} />
+
                         {renderLengthSlider()}
                     </>
                 )}

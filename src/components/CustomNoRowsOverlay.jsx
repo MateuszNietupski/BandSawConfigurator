@@ -6,7 +6,7 @@ export default function CustomNoRowsOveraly({ selectedMachine }) {
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
     const machineSpecs = selectedMachine
         ? [selectedMachine.length, selectedMachine.width, selectedMachine.thickness]
-            .filter(Boolean) // usuwa puste wartości
+            .filter(Boolean)
             .join(' x ') + ' mm'
         : "";
 
@@ -26,7 +26,7 @@ export default function CustomNoRowsOveraly({ selectedMachine }) {
                 color="primary.main"
                 sx={{
                     fontWeight: 800,
-                    whiteSpace: isMobile ? 'normal' : 'nowrap', // Na desktopie w jednej linii
+                    whiteSpace: isMobile ? 'normal' : 'nowrap', 
                 }}
             >
                 {selectedMachine ? `Piły dla modelu ${selectedMachine.name}` : "Brak wyników"}
