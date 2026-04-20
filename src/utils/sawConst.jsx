@@ -22,9 +22,11 @@ export const tpiData = {
     '14/18': { range: '< 5 mm'},
 };
 
-export const getTpiHint = (tpiValue) => {
+export const getTpiHint = (tpiValue, isMobile = false) => {
     const data = tpiData[tpiValue];
     if (!data) return '';
+
+    if(isMobile) return `Optymalny przekrój ${data.range}`;
     
     if (tpiValue === '14/18') {
         return `Zalecana do bardzo cienkich ścianek i blach ${data.range}`;

@@ -102,6 +102,7 @@ const MachineDataGrid = ({ machines, onSelectMachine }) => {
                         sx={{ minWidth: 0, p: 0.5 }}
                         onClick={() => onSelectMachine(params.row)}
                     >
+                        
                         <CheckCircleIcon fontSize="small" />
                     </Button>
                 ) : (

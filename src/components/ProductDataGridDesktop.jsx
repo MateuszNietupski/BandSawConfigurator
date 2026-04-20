@@ -62,7 +62,7 @@ export default function ProductGridDesktop({ rows, selectedMachine }) {
             flex: 1,
             headerAlign: 'center',
             align: 'center',
-            minWidth: 160,
+            minWidth: isMobile ? 140 : 160,
             mobileOrder: 2,
             renderCell: (params) => {
                 const colors = typeColors[params.value] || { bg: '#F5F5F5', border: '#9E9E9E', text: '#616161' };
@@ -111,7 +111,7 @@ export default function ProductGridDesktop({ rows, selectedMachine }) {
             flex: 1,
             headerAlign: 'center',
             align: 'center',
-            minWidth: 70,
+            minWidth: isMobile ? 50 : 70,
             mobileOrder: 3,
             sortComparator: (v1, v2) => {
                 const parseTpi = (val) => {
@@ -162,11 +162,11 @@ export default function ProductGridDesktop({ rows, selectedMachine }) {
             }
         },
         {
-            field: "Length", headerAlign: 'center', align: 'center', flex: 1, headerName: "Długość", minWidth: 100, type: "number",mobileOrder: 5, renderCell: (params) => `${params.value} mm`,
+            field: "Length", headerAlign: 'center', align: 'center', flex: 1, headerName: "Długość", minWidth: 100, type: "number", mobileOrder: 5, renderCell: (params) => `${params.value} mm`,
         },
         { field: "Width", headerAlign: 'center', align: 'center', flex: 1, headerName: "Szerokość", minWidth: 100, type: "number", mobileOrder: 6, renderCell: (params) => `${params.value} mm`, },
         { field: "Thickness", flex: 1, headerAlign: 'center', align: 'center', headerName: "Grubość", minWidth: 100, type: "number", mobileOrder: 7, renderCell: (params) => `${params.value} mm`, },
-        
+
         {
             field: 'Title_URL',
             headerName: '',
@@ -191,7 +191,7 @@ export default function ProductGridDesktop({ rows, selectedMachine }) {
                     sx={{
                         textTransform: 'none',
                         fontWeight: 600,
-                        
+
                         fontSize: isMobile ? 10 : 12,
                     }}
                 >
