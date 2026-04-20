@@ -8,15 +8,15 @@ export default function ContactData() {
         <>
             <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 1, mb: 1 }}>
                 <EmailIcon sx={{ fontSize: 20 }} />
-                <Link href="mailto:sklep@e-darmet.pl" sx={{ color: "inherit", textDecoration: "none", fontWeight: "bold" }}>
-                    sklep@e-darmet.pl
+                <Link href="mailto:handel@darmet.com.pl" sx={{ color: "inherit", textDecoration: "none", fontWeight: "bold" }}>
+                    handel@darmet.com.pl
                 </Link>
             </Box>
 
             <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 1 }}>
                 <PhoneIcon sx={{ fontSize: 20 }} />
                 <Link href="tel:+48123456789" sx={{ color: "inherit", textDecoration: "none", fontWeight: "bold" }}>
-                    +48 123 456 789
+                    85 653 86 70
                 </Link>
             </Box>
         </>

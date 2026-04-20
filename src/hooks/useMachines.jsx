@@ -5,6 +5,7 @@ const machines = rawMachines.map((m, index) => ({
   imageUrl: m.Image_URL,
   name: m.Name,
   manufacturer: m.Producer,
+  category: m.Category,
   length: m.Length,
   width: m.Width,
   thickness: m.Thickness,

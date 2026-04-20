@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useState, useMemo } from 'react';
 import {
     Box, Typography, FormControl, InputLabel, Select, MenuItem,
-    Chip, OutlinedInput, Checkbox, ListItemText, Divider,
-    Button, useMediaQuery, useTheme, Slider,
+    Chip, OutlinedInput, Checkbox, ListItemText, Divider, Button,
+    useMediaQuery, useTheme, Slider, Collapse,
+    Accordion, AccordionSummary, AccordionDetails, Badge, IconButton, Tooltip,
 } from '@mui/material';
 import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
 import ListAltIcon from '@mui/icons-material/ListAlt';
-import LengthFilter from './filters/LengthFilter.jsx'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing';
+import LengthFilter from './filters/LengthFilter.jsx';
 import TpiFilter from './filters/TpiFilter.jsx';
+import MachineCategoryFilter from './filters/MachineCategoryFilter.jsx';
 
 const ClearButton = ({ onClick, size = 'small', label = "Wyczyść" }) => (
     <Button
@@ -48,11 +53,15 @@ const FilterPanel = ({
     onLengthChange,
     selectedTpi = [],
     tpiOptions = [],
-    onTpiChange
+    onTpiChange,
+    selectedCategories = [],
+    categoryOptions = [],
+    onCategoriesChange
 }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
     const isMachineView = viewMode === 'machines';
+    const [expandedPanel, setExpandedPanel] = useState(null);
 
     const renderTypeFilter = (size = "medium") => (
         <FormControl fullWidth size={size}>
@@ -119,38 +128,168 @@ const FilterPanel = ({
             size={size}
         />
     );
+
+    const renderCategoryFilter = (size = "medium") => (
+        <MachineCategoryFilter
+            value={selectedCategories}
+            options={categoryOptions}
+            onChange={onCategoriesChange}
+            size={size}
+        />
+    );
+
     // --- WIDOK MOBILNY ---
     if (isMobile) {
-        return (
-            <Box sx={{ p: 2, borderBottom: '1px solid', borderColor: 'divider', bgcolor: 'background.paper' }}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                    {isMachineView ? (
-                        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                            <Button variant="outlined" size="small" onClick={onShowSaws} startIcon={<ListAltIcon />}>
-                                Wróć
+        // Liczniki aktywnych filtrów per sekcja
+        const typesTpiCount = selectedTypes.length + selectedTpi.length;
+        const lengthActive = lengthSteps && lengthSteps.length > 1
+            && (lengthRange[0] !== 0 || lengthRange[1] !== lengthSteps.length - 1);
+        const lengthCount = lengthActive ? 1 : 0;
+        const hasAnySawFilter = !!selectedMachine || typesTpiCount > 0 || lengthCount > 0;
+
+        // Auto-rozwijanie: sekcja otwarta gdy ma aktywne filtry (chyba że user ręcznie zmienił)
+        const autoExpanded = (panelId) => {
+            if (expandedPanel !== null) return expandedPanel === panelId;
+            if (panelId === 'typesTpi') return typesTpiCount > 0;
+            if (panelId === 'length') return lengthCount > 0;
+            return false;
+        };
+
+        const handleAccordionChange = (panelId) => (_, isExpanded) => {
+            setExpandedPanel(isExpanded ? panelId : false);
+        };
+
+        if (isMachineView) {
+            // Widok maszyn — zostawiamy bez akordeonu (tylko 2 pola)
+            return (
+                <Box sx={{ px: 2, py: 1.5, borderBottom: '1px solid', borderColor: 'divider', bgcolor: 'background.paper' }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Button onClick={onShowSaws} startIcon={<ListAltIcon />} size="small" sx={{ textTransform: 'none' }}>
+                                Wróć do pił
                             </Button>
-                            <Box sx={{ flex: 1 }}>{renderManufacturerFilter("small")}</Box>
-                        </Box>
-                    ) : (
-                        <>
-                            <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                                {selectedMachine ? (
-                                    <Chip
-                                        label={selectedMachine.name}
-                                        onDelete={onClearMachine}
-                                        color="primary"
+                            {(selectedManufacturers.length > 0 || selectedCategories.length > 0) && (
+                                <Tooltip title="Wyczyść filtry maszyn">
+                                    <IconButton
                                         size="small"
-                                    />
-                                ) : (
-                                    <Button variant="outlined" size="small" onClick={onShowMachines}>Maszyna</Button>
-                                )}
-                                <Box sx={{ flex: 1 }}>{renderTypeFilter("small")}</Box>
-                                <ClearButton onClick={onClearFilters} />
-                            </Box>
-                            {renderLengthSlider()}
-                        </>
+                                        onClick={() => { onManufacturersChange([]); onCategoriesChange([]); }}
+                                    >
+                                        <FilterAltOffIcon fontSize="small" />
+                                    </IconButton>
+                                </Tooltip>
+                            )}
+                        </Box>
+                        <Box sx={{ display: 'flex', gap: 1 }}>
+                            <Box sx={{ flex: 1 }}>{renderManufacturerFilter('small')}</Box>
+                            <Box sx={{ flex: 1 }}>{renderCategoryFilter('small')}</Box>
+                        </Box>
+                    </Box>
+                </Box>
+            );
+        }
+
+        // ===== Widok pił (mobile) — Maszyna na górze + akordeony =====
+        return (
+            <Box sx={{ borderBottom: '1px solid', borderColor: 'divider', bgcolor: 'background.paper' }}>
+                <Box sx={{ px: 2, py: 1.5, display: 'flex', gap: 1, alignItems: 'center' }}>
+                    <Box sx={{ flex: 1, minWidth: 0 }}>
+                        {selectedMachine ? (
+                            <Chip
+                                icon={<PrecisionManufacturingIcon />}
+                                label={selectedMachine.name}
+                                onDelete={onClearMachine}
+                                color="primary"
+                                variant="outlined"
+                                sx={{
+                                    width: '100%',
+                                    height: 'auto',
+                                    py: 0.75,
+                                    fontWeight: 600,
+                                    '& .MuiChip-label': {
+                                        whiteSpace: 'normal',
+                                        py: 0.25,
+                                        overflow: 'visible',
+                                        textOverflow: 'clip',
+                                    },
+                                }}
+                            />
+                        ) : (
+                            <Button
+                                fullWidth
+                                variant="outlined"
+                                size="medium"
+                                startIcon={<PrecisionManufacturingIcon />}
+                                onClick={onShowMachines}
+                                sx={{ textTransform: 'none', justifyContent: 'flex-start', fontWeight: 600 }}
+                            >
+                                Wybierz maszynę
+                            </Button>
+                        )}
+                    </Box>
+                    {hasAnySawFilter && (
+                        <Tooltip title="Wyczyść wszystkie filtry">
+                            <IconButton
+                                onClick={onClearFilters}
+                                size="medium"
+                                sx={{ flexShrink: 0, border: '1px solid', borderColor: 'divider' }}
+                            >
+                                <FilterAltOffIcon fontSize="small" />
+                            </IconButton>
+                        </Tooltip>
                     )}
                 </Box>
+
+
+
+                <Box sx={{ px: 2, pb: 1.5 }}>
+                    <Badge
+                        badgeContent={selectedTypes.length}
+                        color="primary"
+                        invisible={selectedTypes.length === 0}
+                        sx={{ width: '100%', '& .MuiBadge-badge': { top: 4, right: 20 } }}
+                    >
+                        {renderTypeFilter('small')}
+                    </Badge>
+                </Box>
+
+                <Box sx={{ px: 2, pb: 2 }}>
+                    <Badge
+                        badgeContent={selectedTpi.length}
+                        color="primary"
+                        invisible={selectedTpi.length === 0}
+                        sx={{ width: '100%', '& .MuiBadge-badge': { top: 4, right: 20 } }}
+                    >
+                        {renderTpiFilter('small')}
+                    </Badge>
+                </Box>
+
+                <Accordion
+                    expanded={autoExpanded('length')}
+                    onChange={handleAccordionChange('length')}
+                    disableGutters
+                    elevation={0}
+                    square
+                    sx={{
+                        '&:before': { display: 'none' },
+                        borderTop: '1px solid',
+                        borderColor: 'divider',
+
+                    }}
+                >
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        sx={{ minHeight: 44, '& .MuiAccordionSummary-content': { my: 0.75 } }}
+                    >
+                        <Badge badgeContent={lengthCount} color="primary" sx={{ '& .MuiBadge-badge': { right: -16 } }}>
+                            <Typography variant="body2" fontWeight={600}>
+                                Długość piły
+                            </Typography>
+                        </Badge>
+                    </AccordionSummary>
+                    <AccordionDetails sx={{ pt: 0, pb: 2 }}>
+                        {renderLengthSlider()}
+                    </AccordionDetails>
+                </Accordion>
             </Box>
         );
     }
@@ -170,19 +309,52 @@ const FilterPanel = ({
                 {isMachineView ? (
                     <>
                         <SectionTitle
-                            extra={selectedManufacturers.length > 0 && <ClearButton onClick={() => onManufacturersChange([])} />}
+                            extra={(selectedManufacturers.length > 0 || selectedCategories.length > 0) && (
+                                <ClearButton onClick={() => {
+                                    onManufacturersChange([]);
+                                    onCategoriesChange([]);
+                                }} />
+                            )}
                         >
-                            PRODUCENCI
+                            FILTRY MASZYN
                         </SectionTitle>
+                        <Typography variant="caption" fontWeight={700} sx={{ display: 'block', mb: 1, mt: 1 }}>
+                            PRODUCENCI
+                        </Typography>
                         {renderManufacturerFilter()}
 
-                        <Typography variant="body2" color="text.secondary" sx={{ mt: 3, mb: 2, fontStyle: 'italic' }}>
-                            Wybierz producenta, aby przefiltrować listę maszyn.
+                        <Divider sx={{ mb: 3 }} />
+                        <Typography variant="caption" fontWeight={700} sx={{ display: 'block', mb: 1 }}>
+                            TYP MASZYNY
                         </Typography>
+                        <Box sx={{ mb: 4 }}>
+                            {renderCategoryFilter()}
+                        </Box>
 
-                        <Button fullWidth variant="outlined" onClick={onShowSaws} startIcon={<ListAltIcon />}>
-                            Pokaż wszystkie piły
+                        <Button
+                            fullWidth
+                            variant="outlined"
+                            onClick={onShowSaws}
+                            startIcon={<ListAltIcon />}
+                            sx={{ mt: 2 }}
+                        >
+                            Wróć do pił
                         </Button>
+                        <Typography
+                            variant="caption"
+                            color="text.secondary"
+                            sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 1,
+                                mt: 1.5,
+                                px: 1,
+                                lineHeight: 1.2
+                            }}
+                        >
+                            <InfoOutlinedIcon sx={{ fontSize: 16 }} />
+                            Wróć do listy pił taśmowych bez wybierania konkretnego modelu maszyny
+                        </Typography>
                     </>
                 ) : (
                     <>

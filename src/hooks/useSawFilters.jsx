@@ -8,6 +8,7 @@ export function useSawFilters(saws, machines) {
     const [selectedManufacturers, setSelectedManufacturers] = useState([]);
     const [lengthRange, setLengthRange] = useState([0, 0]);
     const [selectedTpi, setSelectedTpi] = useState([]);
+    const [selectedCategories, setSelectedCategories] = useState([]);
 
     // --- DANE POMOCNICZE (Opcje w filtrach) ---
     const sawTypes = useMemo(() => [...new Set(saws.map((s) => s.Type))].sort(), [saws]);
@@ -17,11 +18,18 @@ export function useSawFilters(saws, machines) {
         const unique = [...new Set(rawValues)].filter(Boolean);
 
         return unique.sort((a, b) => {
-            const valA = parseFloat(a);
-            const valB = parseFloat(b);
-            return valA - valB;
+            const [aMin, aMax] = a.split('/').map(parseFloat);
+            const [bMin, bMax] = b.split('/').map(parseFloat);
+            if (aMin !== bMin) {
+                return aMin - bMin;
+            }
+            return (aMax || 0) - (bMax || 0);
         });
     }, [saws]);
+    const categoryOptions = useMemo(() => {
+        const raw = machines.map(m => m.category).filter(Boolean);
+        return [...new Set(raw)].sort();
+    }, [machines]);
 
     // --- LOGIKA SUWAKA (KROKI) ---
     const lengthSteps = useMemo(() => {
@@ -65,12 +73,20 @@ export function useSawFilters(saws, machines) {
     }, [saws, selectedMachine, selectedTypes, selectedTpi, lengthRange, lengthSteps, machines]);
 
     const filteredMachines = useMemo(() => {
-        if (selectedManufacturers.length === 0) return machines;
-        return machines.filter((m) => selectedManufacturers.includes(m.manufacturer));
-    }, [machines, selectedManufacturers]);
+        return machines.filter((m) => {
+            const matchesManufacturer = selectedManufacturers.length === 0 ||
+                selectedManufacturers.includes(m.manufacturer);
+            const matchesCategory = selectedCategories.length === 0 ||
+                (m.category && selectedCategories.includes(m.category));
+            return matchesManufacturer && matchesCategory;
+        });
+    }, [machines, selectedManufacturers, selectedCategories]);
 
     const handlers = {
         handleSelectMachine: (machine) => {
+            setSelectedTpi([]);
+            setSelectedTypes([]);
+            setLengthRange([0, 0]);
             setSelectedMachine(machine);
             setViewMode('saws');
         },
@@ -85,20 +101,35 @@ export function useSawFilters(saws, machines) {
             setSelectedTypes([]);
             setSelectedManufacturers([]);
             setSelectedTpi([]);
+            setSelectedCategories([]);
+            setLengthRange([0, 0]);
         },
         setSelectedTypes,
         setSelectedManufacturers,
         setLengthRange,
-        setSelectedTpi
+        setSelectedTpi,
+        setSelectedCategories
     };
 
     return {
         state: {
-            viewMode, selectedMachine, selectedTypes,
-            selectedManufacturers, lengthRange, lengthSteps,
-            selectedTpi, tpiOptions
+            viewMode,
+            selectedMachine,
+            selectedTypes,
+            selectedManufacturers,
+            lengthRange,
+            lengthSteps,
+            selectedTpi,
+            selectedCategories,
         },
-        results: { filteredSaws, filteredMachines, sawTypes, manufacturers, tpiOptions },
+        results: {
+            filteredSaws,
+            filteredMachines,
+            sawTypes,
+            manufacturers,
+            tpiOptions,
+            categoryOptions
+        },
         handlers
     };
 }

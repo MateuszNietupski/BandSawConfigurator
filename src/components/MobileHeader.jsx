@@ -12,7 +12,7 @@ const MobileHeader = ({ filteredCount, totalCount, viewMode }) => {
             <Link href="https://www.e-darmet.pl/darmet/darmet_logo_1.png" target="_blank" rel="noopener" sx={{ display: 'flex', textDecoration: 'none' }}>
                 <Box
                     sx={{
-                        width: 100, height: 36, bgcolor: 'primary.main', borderRadius: 1,
+                        width: 120, height: 40, bgcolor: 'primary.main', borderRadius: 1,
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         color: '#fff', fontWeight: 700, fontSize: 10, letterSpacing: 1,
                     }}
@@ -21,14 +21,15 @@ const MobileHeader = ({ filteredCount, totalCount, viewMode }) => {
                         src="/darmet_logo_1.png"
                         alt="Darmet"
                         style={{
-                            height: 40,
+                            width: "100%",
+                            height: "100%",
                             objectFit: "contain",
                         }}
                     />
                 </Box>
             </Link>
             <Typography variant="subtitle1" fontWeight={700} color="primary.main" sx={{ flex: 1 }}>
-                {viewMode === 'machines' ? 'Wybierz maszynę' : 'Konfigurator Pił'}
+                {viewMode === 'machines' ? 'Wybierz maszynę' : 'Konfigurator Pił Taśmowych'}
             </Typography>
             <Typography variant="caption" color="text.secondary">
                 {filteredCount}/{totalCount}

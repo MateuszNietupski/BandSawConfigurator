@@ -220,7 +220,7 @@ const MachineDataGrid = ({ machines, onSelectMachine }) => {
                                 mt: 1,
                                 px: 2,
                                 py: 0.5,
-                                bgcolor: '#0e2135',
+                                bgcolor: 'rgba(14, 33, 53, 0.8)',
                                 color: '#fff',
                                 borderRadius: 1,
                                 fontWeight: 600,

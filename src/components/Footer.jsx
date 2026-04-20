@@ -9,8 +9,8 @@ export default function Footer() {
                 py: 3,
                 px: 2,
                 textAlign: "center",
-                backgroundColor: theme.palette.primary.main,      // niebieskie tło
-                color: theme.palette.background.default,          // jasny tekst
+                backgroundColor: theme.palette.primary.main,
+                color: theme.palette.background.default,
             })}
         >
             <Typography variant="body1" sx={{ fontWeight: "bold", mb: 1 }}>
@@ -18,7 +18,7 @@ export default function Footer() {
             </Typography>
 
             <Typography variant="body2" sx={{ mb: 1 }}>
-                Skontaktuj się z nami — oferujemy piły na zamówienie, wykonane precyzyjnie według Twoich wymagań.
+                Skontaktuj się z nami — dostarczamy piły zgrzewane pod wymiar na indywidualne zapytanie – skontaktuj się z nami!
             </Typography>
 
             <ContactData/>

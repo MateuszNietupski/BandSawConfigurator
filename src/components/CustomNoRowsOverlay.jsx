@@ -39,7 +39,7 @@ export default function CustomNoRowsOveraly({ selectedMachine }) {
                         Dostarczamy piły zgrzewane pod wymiar na indywidualne zapytanie – skontaktuj się z nami!
                     </>
                 ) : (
-                    "Zmień parametry filtrowania, aby zobaczyć dostępne produkty."
+                    "Obecnie nie posiadamy w standardowej ofercie pił taśmowych o tych parametrach. Spróbuj zmienić filtry wyszukiwania, aby zobaczyć zbliżone modele. Potrzebujesz czegoś niestandardowego? Dostarczamy piły zgrzewane pod wymiar na indywidualne zapytanie – skontaktuj się z nami!"
                 )}
             </Typography>
             <ContactData />

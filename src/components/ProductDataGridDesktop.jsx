@@ -30,6 +30,7 @@ export default function ProductGridDesktop({ rows, selectedMachine }) {
             headerAlign: 'center',
             align: 'center',
             cellClassName: 'no-focus-cell',
+            mobileOrder: 1,
             renderCell: (params) => (
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
                     <Avatar
@@ -62,10 +63,32 @@ export default function ProductGridDesktop({ rows, selectedMachine }) {
             headerAlign: 'center',
             align: 'center',
             minWidth: 160,
+            mobileOrder: 2,
             renderCell: (params) => {
                 const colors = typeColors[params.value] || { bg: '#F5F5F5', border: '#9E9E9E', text: '#616161' };
                 return (
-                    <Tooltip title={typeDescriptions[params.value] || ''} arrow placement="right">
+                    <Tooltip
+                        title={typeDescriptions[params.value] || ''}
+                        arrow
+                        placement="right"
+                        slotProps={{
+                            tooltip: {
+                                sx: {
+                                    bgcolor: 'rgba(14, 33, 53, 0.8)',
+                                    color: '#ffffff',
+                                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                                    boxShadow: '0px 2px 8px rgba(0,0,0,0.1)',
+                                    backdropFilter: 'blur(4px)',
+                                    fontSize: '0.75rem',
+                                    fontWeight: 500,
+                                    '& .MuiTooltip-arrow': {
+                                        // To kluczowy moment – strzałka musi mieć ten sam kolor co tło
+                                        color: 'rgba(14, 33, 53, 0.8)',
+                                    }
+                                }
+                            }
+                        }}
+                    >
                         <Chip
                             label={params.value}
                             size="small"
@@ -83,18 +106,13 @@ export default function ProductGridDesktop({ rows, selectedMachine }) {
             },
         },
         {
-            field: "Length", headerAlign: 'center', align: 'center', flex: 1, headerName: "Długość", minWidth: 100, type: "number", renderCell: (params) => `${params.value} mm`,
-        },
-        { field: "Width", headerAlign: 'center', align: 'center', flex: 1, headerName: "Szerokość", minWidth: 100, type: "number", renderCell: (params) => `${params.value} mm`, },
-        { field: "Thickness", flex: 1, headerAlign: 'center', align: 'center', headerName: "Grubość", minWidth: 100, type: "number", renderCell: (params) => `${params.value} mm`, },
-        {
             field: "Tpi",
             headerName: "TPI",
             flex: 1,
             headerAlign: 'center',
             align: 'center',
             minWidth: 70,
-
+            mobileOrder: 3,
             sortComparator: (v1, v2) => {
                 const parseTpi = (val) => {
                     if (!val) return [0, 0];
@@ -144,14 +162,21 @@ export default function ProductGridDesktop({ rows, selectedMachine }) {
             }
         },
         {
+            field: "Length", headerAlign: 'center', align: 'center', flex: 1, headerName: "Długość", minWidth: 100, type: "number",mobileOrder: 5, renderCell: (params) => `${params.value} mm`,
+        },
+        { field: "Width", headerAlign: 'center', align: 'center', flex: 1, headerName: "Szerokość", minWidth: 100, type: "number", mobileOrder: 6, renderCell: (params) => `${params.value} mm`, },
+        { field: "Thickness", flex: 1, headerAlign: 'center', align: 'center', headerName: "Grubość", minWidth: 100, type: "number", mobileOrder: 7, renderCell: (params) => `${params.value} mm`, },
+        
+        {
             field: 'Title_URL',
             headerName: '',
-            minWidth: 200,
+            minWidth: isMobile ? 100 : 200,
             flex: 1,
             headerAlign: 'center',
             align: 'center',
             sortable: false,
             filterable: false,
+            mobileOrder: 4,
             renderCell: (params) => (
                 <Button
                     variant="outlined"
@@ -166,24 +191,32 @@ export default function ProductGridDesktop({ rows, selectedMachine }) {
                     sx={{
                         textTransform: 'none',
                         fontWeight: 600,
-                        fontSize: 12,
+                        
+                        fontSize: isMobile ? 10 : 12,
                     }}
                 >
-                    Sprawdź cenę w sklepie
+                    {isMobile ? "Sklep" : "Sprawdź cenę w sklepie"}
                 </Button>
             ),
         }
     ];
 
-    if (!rows || rows.length === 0) {
-    }
+    const displayColumns = React.useMemo(() => {
+        if (!isMobile) return columns;
+
+        return [...columns].sort((a, b) => {
+            const orderA = a.mobileOrder || 99;
+            const orderB = b.mobileOrder || 99;
+            return orderA - orderB;
+        });
+    }, [isMobile, columns]);
 
     return (
         <Box sx={{ width: "100%", width: '100%' }}>
             <DataGrid
                 disableColumnMenu
                 rows={rows}
-                columns={columns}
+                columns={displayColumns}
                 rowHeight={80}
                 initialState={{
                     pagination: { paginationModel: { pageSize: 10 } },
@@ -277,7 +310,7 @@ export default function ProductGridDesktop({ rows, selectedMachine }) {
                                 mt: 1,
                                 px: 2,
                                 py: 0.5,
-                                bgcolor: '#0e2135',
+                                bgcolor: 'rgba(14, 33, 53, 0.8)',
                                 color: '#fff',
                                 borderRadius: 1,
                                 fontWeight: 600,
