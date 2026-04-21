@@ -82,7 +82,6 @@ export default function ProductGridDesktop({ rows, selectedMachine }) {
                                     fontSize: '0.75rem',
                                     fontWeight: 500,
                                     '& .MuiTooltip-arrow': {
-                                        // To kluczowy moment – strzałka musi mieć ten sam kolor co tło
                                         color: 'rgba(14, 33, 53, 0.8)',
                                     }
                                 }
@@ -140,15 +139,15 @@ export default function ProductGridDesktop({ rows, selectedMachine }) {
                         slotProps={{
                             tooltip: {
                                 sx: {
-                                    bgcolor: '#f0f7ff',
-                                    color: '#0e2135',
-                                    border: '1px solid #d0e2f2',
+                                    bgcolor: 'rgba(14, 33, 53, 0.8)',
+                                    color: '#ffffff',
+                                    border: '1px solid rgba(255, 255, 255, 0.2)',
                                     boxShadow: '0px 2px 8px rgba(0,0,0,0.1)',
+                                    backdropFilter: 'blur(4px)',
                                     fontSize: '0.75rem',
                                     fontWeight: 500,
                                     '& .MuiTooltip-arrow': {
-                                        color: '#f0f7ff',
-                                        '&::before': { border: '1px solid #d0e2f2' }
+                                        color: 'rgba(14, 33, 53, 0.8)',
                                     }
                                 }
                             }
