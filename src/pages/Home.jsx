@@ -26,7 +26,7 @@ export default function Home({ saws, loading }) {
         lengthSteps: state.lengthSteps,
         tpiOptions: results.tpiOptions,
         categoryOptions: results.categoryOptions,
-        
+
         // Aktualne wartości stanów (z hooka!)
         selectedTypes: state.selectedTypes,
         selectedMachine: state.selectedMachine,
@@ -46,6 +46,7 @@ export default function Home({ saws, loading }) {
         onShowMachines: handlers.handleShowMachines,
         onClearMachine: handlers.handleClearMachine,
         onShowSaws: handlers.handleShowSaws,
+        facetCounts: results.facetCounts,
     };
 
     if (loading) return <CircularProgress />;
@@ -57,11 +58,11 @@ export default function Home({ saws, loading }) {
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-            <Box sx={{ 
-                display: 'flex', 
-                flex: 1, 
-                flexDirection: isMobile ? 'column' : 'row', 
-                overflow: 'hidden' 
+            <Box sx={{
+                display: 'flex',
+                flex: 1,
+                flexDirection: isMobile ? 'column' : 'row',
+                overflow: 'hidden'
             }}>
                 {!isMobile && <FilterPanel {...filterProps} />}
 
@@ -85,9 +86,9 @@ export default function Home({ saws, loading }) {
 
                     <Box sx={{ flex: 1, p: isMobile ? 1 : 2 }}>
                         {state.viewMode === 'machines' ? (
-                            <MachineDataGrid 
-                                machines={results.filteredMachines} 
-                                onSelectMachine={handlers.handleSelectMachine} 
+                            <MachineDataGrid
+                                machines={results.filteredMachines}
+                                onSelectMachine={handlers.handleSelectMachine}
                             />
                         ) : (
                             <ProductGridDesktop

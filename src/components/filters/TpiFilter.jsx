@@ -6,8 +6,7 @@ import {
 import { getTpiHint } from '../../utils/sawConst';
 
 
-
-const TpiFilter = ({ value, options, onChange, size = 'medium' }) => {
+const TpiFilter = ({ value, options, onChange, size = 'medium', facetCounts = {} }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -28,40 +27,66 @@ const TpiFilter = ({ value, options, onChange, size = 'medium' }) => {
                     </Box>
                 )}
                 MenuProps={{
-                    PaperProps: { sx: { maxHeight: 360 } },
+                    PaperProps: { 
+                        sx: { 
+                            maxHeight: 360,
+                            marginTop: '8px' // Odstęp, żeby nie zasłaniało Inputa
+                        } 
+                    },
+                    // Te parametry sprawiają, że menu otwiera się pod spodem, a nie NA filtrze
+                    anchorOrigin: {
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    },
+                    transformOrigin: {
+                        vertical: 'top',
+                        horizontal: 'left',
+                    }
                 }}
             >
                 {options.map((tpi) => {
                     const hint = getTpiHint(tpi, isMobile);
+                    // Pobieramy liczbę z facetCounts (domyślnie 0)
+                    const count = facetCounts[tpi] || 0;
+                    const isSelected = value.includes(tpi);
+
                     return (
                         <MenuItem
                             key={tpi}
                             value={tpi}
+                            // Blokujemy klikanie, jeśli wynik to 0 i opcja nie jest zaznaczona
+                            disabled={count === 0 && !isSelected}
                             sx={{
                                 py: 0.5,
                                 minHeight: 'auto',
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: 1,
+                                opacity: count === 0 && !isSelected ? 0.5 : 1
                             }}
                         >
                             <Checkbox
-                                checked={value.includes(tpi)}
+                                checked={isSelected}
                                 size="small"
                                 sx={{ p: 0.5 }}
                             />
                             <ListItemText
                                 primary={
-                                    <Typography variant="body2" fontWeight={700} sx={{ lineHeight: 1.2 }}>
-                                        {tpi} TPI
-                                    </Typography>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                        <Typography variant="body2" fontWeight={700}>
+                                            {tpi} TPI
+                                        </Typography>
+                                        {/* Licznik wyników */}
+                                        <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 400 }}>
+                                            ({count})
+                                        </Typography>
+                                    </Box>
                                 }
-                                sx={{ m: 0, flex: '0 0 auto', minWidth: 56 }}
+                                sx={{ m: 0, flex: '0 0 auto', minWidth: 80 }}
                             />
                             {hint && (
                                 <Typography
                                     variant="caption"
-                                    title={hint}
                                     sx={{
                                         flex: 1,
                                         px: 0.75,
@@ -70,13 +95,12 @@ const TpiFilter = ({ value, options, onChange, size = 'medium' }) => {
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        textAlign: 'center',
                                         color: 'primary.dark',
                                         border: '1px solid',
                                         borderColor: 'primary.100',
                                         borderRadius: 0.75,
-                                        fontSize: '0.7rem',
-                                        lineHeight: 1.3,
+                                        fontSize: '0.65rem',
+                                        lineHeight: 1.2,
                                         whiteSpace: 'nowrap',
                                         overflow: 'hidden',
                                         textOverflow: 'ellipsis',

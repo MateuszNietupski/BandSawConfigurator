@@ -4,20 +4,20 @@ import {
     Chip, OutlinedInput, Checkbox, ListItemText, Typography
 } from '@mui/material';
 
-const MachineCategoryFilter = ({ value, options, onChange, size = "medium", facetCounts = {} }) => {
+const MachineManufacturerFilter = ({ value, options, onChange, size = 'medium', facetCounts = {} }) => {
     return (
         <FormControl fullWidth size={size}>
-            <InputLabel id="category-filter-label">Typ maszyny</InputLabel>
+            <InputLabel id="manufacturer-select-label">Producent</InputLabel>
             <Select
-                labelId="category-filter-label"
+                labelId="manufacturer-select-label"
                 multiple
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
-                input={<OutlinedInput label="Typ maszyny" />}
+                input={<OutlinedInput label="Producent" />}
                 renderValue={(selected) => (
                     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                        {selected.map((category) => (
-                            <Chip key={category} label={category} size="small" />
+                        {selected.map((m) => (
+                            <Chip key={m} label={m} size="small" />
                         ))}
                     </Box>
                 )}
@@ -27,14 +27,14 @@ const MachineCategoryFilter = ({ value, options, onChange, size = "medium", face
                     transformOrigin: { vertical: 'top', horizontal: 'left' }
                 }}
             >
-                {options.map((category) => {
-                    const count = facetCounts[category] || 0;
-                    const isSelected = value.includes(category);
+                {options.map((m) => {
+                    const count = facetCounts[m] || 0;
+                    const isSelected = value.includes(m);
 
                     return (
-                        <MenuItem 
-                            key={category} 
-                            value={category}
+                        <MenuItem
+                            key={m}
+                            value={m}
                             disabled={count === 0 && !isSelected}
                             sx={{
                                 py: 0.5,
@@ -43,11 +43,11 @@ const MachineCategoryFilter = ({ value, options, onChange, size = "medium", face
                             }}
                         >
                             <Checkbox checked={isSelected} size="small" sx={{ p: 0.5 }} />
-                            <ListItemText 
+                            <ListItemText
                                 primary={
                                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', pr: 1 }}>
                                         <Typography variant="body2" sx={{ fontWeight: isSelected ? 600 : 400 }}>
-                                            {category}
+                                            {m}
                                         </Typography>
                                         <Typography variant="caption" color="text.secondary">
                                             ({count})
@@ -63,4 +63,4 @@ const MachineCategoryFilter = ({ value, options, onChange, size = "medium", face
     );
 };
 
-export default MachineCategoryFilter;
+export default MachineManufacturerFilter;

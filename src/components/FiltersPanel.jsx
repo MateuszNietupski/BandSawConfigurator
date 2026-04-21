@@ -1,8 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import {
-    Box, Typography, FormControl, InputLabel, Select, MenuItem,
-    Chip, OutlinedInput, Checkbox, ListItemText, Divider, Button,
-    useMediaQuery, useTheme, Slider, Collapse,
+    Box, Typography,
+    Chip, Divider, Button,
+    useMediaQuery, useTheme,
     Accordion, AccordionSummary, AccordionDetails, Badge, IconButton, Tooltip,
 } from '@mui/material';
 import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
@@ -11,8 +11,10 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing';
 import LengthFilter from './filters/LengthFilter.jsx';
+import SawTypeFilter from './filters/SawTypeFilter.jsx';
 import TpiFilter from './filters/TpiFilter.jsx';
 import MachineCategoryFilter from './filters/MachineCategoryFilter.jsx';
+import ManufacturerFilter from './filters/ManufacturerFilter.jsx';
 
 const ClearButton = ({ onClick, size = 'small', label = "Wyczyść" }) => (
     <Button
@@ -56,7 +58,8 @@ const FilterPanel = ({
     onTpiChange,
     selectedCategories = [],
     categoryOptions = [],
-    onCategoriesChange
+    onCategoriesChange,
+    facetCounts,
 }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -64,51 +67,23 @@ const FilterPanel = ({
     const [expandedPanel, setExpandedPanel] = useState(null);
 
     const renderTypeFilter = (size = "medium") => (
-        <FormControl fullWidth size={size}>
-            <InputLabel>Typ piły</InputLabel>
-            <Select
-                multiple
-                value={selectedTypes}
-                onChange={(e) => onTypesChange(e.target.value)}
-                input={<OutlinedInput label="Typ piły" />}
-                renderValue={(selected) => (
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                        {selected.map((type) => <Chip key={type} label={type} size="small" />)}
-                    </Box>
-                )}
-            >
-                {sawTypes.map((type) => (
-                    <MenuItem key={type} value={type}>
-                        <Checkbox checked={selectedTypes.includes(type)} size="small" />
-                        <ListItemText primary={type} />
-                    </MenuItem>
-                ))}
-            </Select>
-        </FormControl>
+        <SawTypeFilter
+            value={selectedTypes}
+            options={sawTypes}
+            onChange={onTypesChange}
+            size={size}
+            facetCounts={facetCounts?.saws?.Type || {}}
+        />
     );
 
     const renderManufacturerFilter = (size = "medium") => (
-        <FormControl fullWidth size={size}>
-            <InputLabel>Producent</InputLabel>
-            <Select
-                multiple
-                value={selectedManufacturers}
-                onChange={(e) => onManufacturersChange(e.target.value)}
-                input={<OutlinedInput label="Producent" />}
-                renderValue={(selected) => (
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                        {selected.map((m) => <Chip key={m} label={m} size="small" />)}
-                    </Box>
-                )}
-            >
-                {manufacturers.map((m) => (
-                    <MenuItem key={m} value={m}>
-                        <Checkbox checked={selectedManufacturers.includes(m)} size="small" />
-                        <ListItemText primary={m} />
-                    </MenuItem>
-                ))}
-            </Select>
-        </FormControl>
+        <ManufacturerFilter
+            value={selectedManufacturers}
+            options={manufacturers}
+            onChange={onManufacturersChange}
+            size={size}
+            facetCounts={facetCounts?.machines?.manufacturer || {}}
+        />
     );
 
     const renderLengthSlider = () => (
@@ -126,6 +101,7 @@ const FilterPanel = ({
             options={tpiOptions}
             onChange={onTpiChange}
             size={size}
+            facetCounts={facetCounts.saws.Tpi}
         />
     );
 
@@ -135,6 +111,7 @@ const FilterPanel = ({
             options={categoryOptions}
             onChange={onCategoriesChange}
             size={size}
+            facetCounts={facetCounts.machines.category}
         />
     );
 
