@@ -30,10 +30,9 @@ const TpiFilter = ({ value, options, onChange, size = 'medium', facetCounts = {}
                     PaperProps: { 
                         sx: { 
                             maxHeight: 360,
-                            marginTop: '8px' // Odstęp, żeby nie zasłaniało Inputa
+                            marginTop: '8px'
                         } 
                     },
-                    // Te parametry sprawiają, że menu otwiera się pod spodem, a nie NA filtrze
                     anchorOrigin: {
                         vertical: 'bottom',
                         horizontal: 'left',
@@ -46,7 +45,6 @@ const TpiFilter = ({ value, options, onChange, size = 'medium', facetCounts = {}
             >
                 {options.map((tpi) => {
                     const hint = getTpiHint(tpi, isMobile);
-                    // Pobieramy liczbę z facetCounts (domyślnie 0)
                     const count = facetCounts[tpi] || 0;
                     const isSelected = value.includes(tpi);
 
@@ -54,7 +52,6 @@ const TpiFilter = ({ value, options, onChange, size = 'medium', facetCounts = {}
                         <MenuItem
                             key={tpi}
                             value={tpi}
-                            // Blokujemy klikanie, jeśli wynik to 0 i opcja nie jest zaznaczona
                             disabled={count === 0 && !isSelected}
                             sx={{
                                 py: 0.5,
@@ -76,7 +73,6 @@ const TpiFilter = ({ value, options, onChange, size = 'medium', facetCounts = {}
                                         <Typography variant="body2" fontWeight={700}>
                                             {tpi} TPI
                                         </Typography>
-                                        {/* Licznik wyników */}
                                         <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 400 }}>
                                             ({count})
                                         </Typography>
