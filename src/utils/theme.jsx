@@ -3,10 +3,10 @@ import { createTheme } from "@mui/material/styles";
 const theme = createTheme({
     palette: {
         primary: {
-            main: "#0e2135",  // kolor przycisków i elementów pomocniczych
+            main: "#0e2135",
         },
         background: {
-            default: "#f5f5f5",  // główne tło całego konfiguratora
+            default: "#f5f5f5",
         },
     },
     typography: {

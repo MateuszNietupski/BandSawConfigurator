@@ -9,8 +9,7 @@ export function useSawFilters(saws, machines) {
     const [lengthRange, setLengthRange] = useState([0, 0]);
     const [selectedTpi, setSelectedTpi] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState([]);
-
-    // --- DANE POMOCNICZE (Opcje w filtrach) ---
+    
     const sawTypes = useMemo(() => [...new Set(saws.map((s) => s.Type))].sort(), [saws]);
     const manufacturers = useMemo(() => [...new Set(machines.map((m) => m.manufacturer))].sort(), [machines]);
     const tpiOptions = useMemo(() => {
@@ -30,8 +29,7 @@ export function useSawFilters(saws, machines) {
         const raw = machines.map(m => m.category).filter(Boolean);
         return [...new Set(raw)].sort();
     }, [machines]);
-
-    // --- LOGIKA SUWAKA (KROKI) ---
+    
     const lengthSteps = useMemo(() => {
         const available = saws.filter((saw) => {
             if (selectedMachine) {
@@ -46,13 +44,11 @@ export function useSawFilters(saws, machines) {
         const unique = [...new Set(available.map((s) => Number(s.Length)))].sort((a, b) => a - b);
         return unique.length > 0 ? unique : [0];
     }, [saws, selectedMachine, selectedTypes, selectedTpi, machines]);
-
-    // Reset suwaka przy zmianie dostępnych kroków
+    
     useEffect(() => {
         setLengthRange([0, lengthSteps.length - 1]);
     }, [lengthSteps]);
-
-    // --- FILTROWANIE GŁÓWNE ---
+    
     const filteredSaws = useMemo(() => {
         return saws.filter((saw) => {
             if (selectedMachine) {
@@ -112,10 +108,7 @@ export function useSawFilters(saws, machines) {
     };
 
     const facetCounts = useMemo(() => {
-        // 1. LICZNIKI DLA PIŁ (Zależą od parametrów pił + WYBRANEJ maszyny)
         const countSaws = (field) => {
-            // Przy zliczaniu np. TPI, ignorujemy wybrane TPI, 
-            // ale uwzględniamy Typ, Długość i WYBRANĄ maszynę.
             const filters = {
                 Type: selectedTypes,
                 Tpi: selectedTpi,
@@ -146,8 +139,7 @@ export function useSawFilters(saws, machines) {
                 return acc;
             }, {});
         };
-
-        // 2. LICZNIKI DLA MASZYN (Zależą tylko od filtrów maszyn)
+        
         const countMachines = (field) => {
             const filters = {
                 manufacturer: selectedManufacturers,

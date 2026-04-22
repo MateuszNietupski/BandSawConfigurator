@@ -1,10 +1,7 @@
 
-import { ThemeProvider, Typography, CssBaseline } from '@mui/material'
-import ProductsList from './ProductList'
+import { ThemeProvider, CssBaseline } from '@mui/material'
 import theme from './utils/theme'
 import useSaws from './hooks/useSaws.jsx'
-import ProductsGrid2 from './components/ProductsGrid2.jsx'
-import ProductsGridResponsive from './components/ProductsGridResponsive.jsx'
 import Home from './pages/Home.jsx';
 
 function App() {
