@@ -1,6 +1,5 @@
 import rawSaws from '../data/tasmowe_pily.json'
 
-
   const saws = rawSaws.map((p, index) => ({
     ...p,
     id: `row-${index}`,

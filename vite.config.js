@@ -10,7 +10,6 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          // 1. Sprawdź czy to biblioteka z node_modules
           if (id.includes('node_modules')) {
             if (id.includes('@mui')) {
               return 'vendor-mui';
@@ -18,11 +17,8 @@ export default defineConfig({
             if (id.includes('react')) {
               return 'vendor-core';
             }
-            return 'vendor-libs'; // Reszta bibliotek (np. emotion)
+            return 'vendor-libs';
           }
-
-          // 2. Sprawdź czy to Twoje dane JSON
-          // Używamy prostej nazwy folderu, co jest bardziej niezawodne
           if (id.includes('src/data/')) {
             return 'app-data';
           }

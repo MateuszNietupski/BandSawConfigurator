@@ -19,14 +19,12 @@ export default function Home({ saws, loading }) {
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
     const filterProps = {
-        // Dane do list
         sawTypes: results.sawTypes,
         manufacturers: results.manufacturers,
         lengthSteps: state.lengthSteps,
         tpiOptions: results.tpiOptions,
         categoryOptions: results.categoryOptions,
-
-        // Aktualne wartości stanów (z hooka!)
+        
         selectedTypes: state.selectedTypes,
         selectedMachine: state.selectedMachine,
         selectedManufacturers: state.selectedManufacturers,
@@ -35,8 +33,7 @@ export default function Home({ saws, loading }) {
         viewMode: state.viewMode,
         selectedTpi: state.selectedTpi,
         onTpiChange: handlers.setSelectedTpi,
-
-        // Funkcje zmieniające stany (z hooka!)
+        
         onTypesChange: handlers.setSelectedTypes,
         onManufacturersChange: handlers.setSelectedManufacturers,
         onCategoriesChange: handlers.setSelectedCategories,
