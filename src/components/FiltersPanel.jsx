@@ -3,7 +3,7 @@ import {
     Box, Typography,
     Chip, Divider, Button,
     useMediaQuery, useTheme,
-    Accordion, AccordionSummary, AccordionDetails, Badge, IconButton, Tooltip,
+    Accordion, AccordionSummary, AccordionDetails, Badge, IconButton, Tooltip, Link
 } from '@mui/material';
 import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';
 import ListAltIcon from '@mui/icons-material/ListAlt';
@@ -274,13 +274,24 @@ const FilterPanel = ({
     // --- WIDOK DESKTOP ---
     return (
         <Box sx={{ width: 280, borderRight: '1px solid', borderColor: 'divider', bgcolor: 'background.paper', display: 'flex', flexDirection: 'column' }}>
-            {/* Logo Section */}
-            <Box sx={{ p: 2.5, textAlign: 'center', borderBottom: '1px solid', borderColor: 'divider' }}>
-                <Box sx={{ bgcolor: 'primary.main', p: 1, borderRadius: 1, mb: 1 }}>
-                    <img src="/darmet_logo_1.png" alt="Darmet" style={{ height: 40, objectFit: "contain" }} />
+            <Link
+                href="https://www.e-darmet.pl"
+                target="_blank"
+                rel="noopener"
+                sx={{
+                    textDecoration: 'none',
+                    display: 'block',
+                    '&:hover .logo-box': { filter: 'brightness(0.9)' }, 
+                    '&:hover .text-link': { color: 'primary.main' }
+                }}
+            >
+                <Box sx={{ p: 2.5, textAlign: 'center', borderBottom: '1px solid', borderColor: 'divider' }}>
+                    <Box sx={{ bgcolor: 'primary.main', p: 1, borderRadius: 1, mb: 1 }}>
+                        <img src="/darmet_logo_1.png" alt="Darmet" style={{ height: 40, objectFit: "contain" }} />
+                    </Box>
+                    <Typography variant="caption" color="text.secondary">wróć do strony głównej</Typography>
                 </Box>
-                <Typography variant="caption" color="text.secondary">wróć do strony głównej</Typography>
-            </Box>
+            </Link>
 
             <Box sx={{ p: 2.5, overflowY: 'auto' }}>
                 {isMachineView ? (

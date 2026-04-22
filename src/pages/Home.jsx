@@ -17,7 +17,6 @@ export default function Home({ saws, loading }) {
     const { state, results, handlers } = useSawFilters(saws, machines);
 
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-    console.log(machines);
 
     const filterProps = {
         // Dane do list

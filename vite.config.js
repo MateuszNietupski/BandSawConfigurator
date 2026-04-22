@@ -2,19 +2,32 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
+  base: './',
   plugins: [react()],
   build: {
-    target: 'es2015',           // kompatybilne z większością przeglądarek
-    minify: true,               // opcjonalnie zmniejsza rozmiar pliku
-    manualChunks: {
-  // Grupa 1: Podstawa działania (najwyższy priorytet cache)
-  'vendor-react': ['react', 'react-dom'],
-  
-  // Grupa 2: Ciężki interfejs (rzadkie zmiany, duża waga)
-  'vendor-mui': ['@mui/material', '@mui/icons-material', '@emotion/react', '@emotion/styled'],
-  
-  // Grupa 3: Twoje dane (częste zmiany, mała waga)
-  'machines-data': ['./src/data/converted2.json', './src/data/csvjson2.json'],
-}
+    target: 'esnext',
+    minify: 'terser',
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          // 1. Sprawdź czy to biblioteka z node_modules
+          if (id.includes('node_modules')) {
+            if (id.includes('@mui')) {
+              return 'vendor-mui';
+            }
+            if (id.includes('react')) {
+              return 'vendor-core';
+            }
+            return 'vendor-libs'; // Reszta bibliotek (np. emotion)
+          }
+
+          // 2. Sprawdź czy to Twoje dane JSON
+          // Używamy prostej nazwy folderu, co jest bardziej niezawodne
+          if (id.includes('src/data/')) {
+            return 'app-data';
+          }
+        }
+      }
+    }
   },
 });

@@ -9,7 +9,7 @@ const MobileHeader = ({ filteredCount, totalCount, viewMode }) => {
                 bgcolor: 'background.paper', display: 'flex', alignItems: 'center', gap: 1.5,
             }}
         >
-            <Link href="https://www.e-darmet.pl/darmet/darmet_logo_1.png" target="_blank" rel="noopener" sx={{ display: 'flex', textDecoration: 'none' }}>
+            <Link href="https://www.e-darmet.pl" target="_blank" rel="noopener" sx={{ display: 'flex', textDecoration: 'none' }}>
                 <Box
                     sx={{
                         width: 120, height: 40, bgcolor: 'primary.main', borderRadius: 1,

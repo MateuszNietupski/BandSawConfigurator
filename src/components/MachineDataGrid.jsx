@@ -128,7 +128,7 @@ const MachineDataGrid = ({ machines, onSelectMachine }) => {
                 rowHeight={isMobile ? 60 : 80}
                 pageSizeOptions={[5, 10, 20, 50]}
                 initialState={{
-                    pagination: { paginationModel: { pageSize: 5 }, },
+                    pagination: { paginationModel: { pageSize: 10 }, },
                     sorting: { sortModel: [{ field: 'name', sort: 'asc' }] },
                 }}
                 disableRowSelectionOnClick
