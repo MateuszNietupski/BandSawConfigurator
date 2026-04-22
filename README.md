@@ -1,16 +1,23 @@
-# React + Vite
+# Konfigurator Pił Taśmowych
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplikacja w React + Vite służąca do dobierania pił taśmowych na podstawie parametrów technicznych lub konkretnego modelu maszyny. 
 
-Currently, two official plugins are available:
+## (UX)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### 1. Widok Pił (Główny)
+* **MUI Data Grid:** Produkty wyświetlane w tabeli z natywnym sortowaniem po każdej kolumnie (szerokość, grubość, podziałka itp.).
+* **Dynamiczne filtry:** Suwaki i selektory reagują na siebie. Jeśli wybierzesz typ piły, który nie występuje w danej długości, suwak długości automatycznie zawęzi zakres do realnie dostępnych wartości.
+* **Liczniki dopasowań:** Przy każdym filtrze (np. checkboxie czy opcji w dropdownie) widać liczbę produktów, które zostaną na liście po jego zaznaczeniu.
 
-## React Compiler
+### 2. Widok Maszyn (Wybór pod urządzenie)
+* Osobny ekran z drugą tabelą (Data Grid), zawierający listę maszyn.
+* Maszyny mają własny zestaw filtrów (producent, model), również działający dynamicznie.
+* **Logika powiązań:** Wybranie maszyny z tabeli cofa użytkownika do widoku pił, automatycznie ustawiając filtry tak, aby pasowały do parametrów technicznych tej konkretnej maszyny. 
+* Wybór maszyny można w każdej chwili wyczyścić, wracając do pełnej bazy pił.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Background Techniczny
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+* **React + Vite:** Szybki build i brak zbędnego narzutu.
+* **MUI Data Grid:** Wykorzystany do obsługi tabel (sortowanie, renderowanie danych).
+* **Stan aplikacji (Logic):** Filtrowanie odbywa się w całości po stronie klienta (Client-side). Logika oblicza przecięcia zbiorów danych przy każdej zmianie filtra, żeby na bieżąco aktualizować opcje w pozostałych selektorach (tzw. zależne filtry).
+* **Data Source:** Statyczne pliki JSON. Dane są importowane jako moduły, co pozwala na ich łatwą podmianę bez ruszania logiki aplikacji.
