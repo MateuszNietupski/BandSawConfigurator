@@ -15,6 +15,7 @@ import SawTypeFilter from './filters/SawTypeFilter.jsx';
 import TpiFilter from './filters/TpiFilter.jsx';
 import MachineCategoryFilter from './filters/MachineCategoryFilter.jsx';
 import ManufacturerFilter from './filters/ManufacturerFilter.jsx';
+import MachineSearchFilter from './filters/MachineSearchFilter.jsx';
 
 const ClearButton = ({ onClick, size = 'small', label = "Wyczyść" }) => (
     <Button
@@ -59,6 +60,8 @@ const FilterPanel = ({
     selectedCategories = [],
     categoryOptions = [],
     onCategoriesChange,
+    machineSearch,
+    onMachineSearchChange,
     facetCounts,
 }) => {
     const theme = useTheme();
@@ -115,16 +118,20 @@ const FilterPanel = ({
         />
     );
 
-    // --- WIDOK MOBILNY ---
+    const renderMachineSearch = (size = "medium") => (
+        <MachineSearchFilter
+            value={machineSearch}
+            onChange={onMachineSearchChange}
+        />
+    );
+
     if (isMobile) {
-        // Liczniki aktywnych filtrów per sekcja
         const typesTpiCount = selectedTypes.length + selectedTpi.length;
         const lengthActive = lengthSteps && lengthSteps.length > 1
             && (lengthRange[0] !== 0 || lengthRange[1] !== lengthSteps.length - 1);
         const lengthCount = lengthActive ? 1 : 0;
         const hasAnySawFilter = !!selectedMachine || typesTpiCount > 0 || lengthCount > 0;
 
-        // Auto-rozwijanie: sekcja otwarta gdy ma aktywne filtry (chyba że user ręcznie zmienił)
         const autoExpanded = (panelId) => {
             if (expandedPanel !== null) return expandedPanel === panelId;
             if (panelId === 'typesTpi') return typesTpiCount > 0;
@@ -137,35 +144,77 @@ const FilterPanel = ({
         };
 
         if (isMachineView) {
-            // Widok maszyn — zostawiamy bez akordeonu (tylko 2 pola)
             return (
-                <Box sx={{ px: 2, py: 1.5, borderBottom: '1px solid', borderColor: 'divider', bgcolor: 'background.paper' }}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <Button onClick={onShowSaws} startIcon={<ListAltIcon />} size="small" sx={{ textTransform: 'none' }}>
-                                Wróć do pił
-                            </Button>
-                            {(selectedManufacturers.length > 0 || selectedCategories.length > 0) && (
-                                <Tooltip title="Wyczyść filtry maszyn">
-                                    <IconButton
-                                        size="small"
-                                        onClick={() => { onManufacturersChange([]); onCategoriesChange([]); }}
-                                    >
-                                        <FilterAltOffIcon fontSize="small" />
-                                    </IconButton>
-                                </Tooltip>
-                            )}
+                <Box sx={{ borderBottom: '1px solid', borderColor: 'divider', bgcolor: 'background.paper' }}>
+                    <Box sx={{ px: 2, py: 1.5, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Button
+                            onClick={onShowSaws}
+                            startIcon={<ListAltIcon />}
+                            size="small"
+                            sx={{ textTransform: 'none', fontWeight: 600 }}
+                        >
+                            Wróć do pił
+                        </Button>
+
+                        {(selectedManufacturers.length > 0 || selectedCategories.length > 0 || machineSearch) && (
+                            <Tooltip title="Wyczyść filtry maszyn">
+                                <IconButton
+                                    size="medium"
+                                    onClick={() => {
+                                        onManufacturersChange([]);
+                                        onCategoriesChange([]);
+                                        onMachineSearchChange("");
+                                    }}
+                                    sx={{ border: '1px solid', borderColor: 'divider' }}
+                                >
+                                    <FilterAltOffIcon fontSize="small" />
+                                </IconButton>
+                            </Tooltip>
+                        )}
+                    </Box>
+
+                    <Box sx={{ px: 2, pb: 1.5, display: 'flex', flexDirection: 'column', gap: 2 }}>
+
+                        <Box sx={{ width: '100%' }}>
+                            {renderMachineSearch('small')}
                         </Box>
-                        <Box sx={{ display: 'flex', gap: 1 }}>
-                            <Box sx={{ flex: 1 }}>{renderManufacturerFilter('small')}</Box>
-                            <Box sx={{ flex: 1 }}>{renderCategoryFilter('small')}</Box>
+                        <Box sx={{ width: '100%' }}>
+                            <Badge
+                                badgeContent={selectedManufacturers.length}
+                                color="primary"
+                                invisible={selectedManufacturers.length === 0}
+                                sx={{
+                                    width: '100%',
+                                    display: 'flex',
+                                    '& .MuiBadge-badge': { top: 4, right: 20 }
+                                }}
+                            >
+                                <Box sx={{ width: '100%' }}>
+                                    {renderManufacturerFilter('small')}
+                                </Box>
+                            </Badge>
+                        </Box>
+                        <Box sx={{ width: '100%' }}>
+                            <Badge
+                                badgeContent={selectedCategories.length}
+                                color="primary"
+                                invisible={selectedCategories.length === 0}
+                                sx={{
+                                    width: '100%',
+                                    display: 'flex',
+                                    '& .MuiBadge-badge': { top: 4, right: 20 }
+                                }}
+                            >
+                                <Box sx={{ width: '100%' }}>
+                                    {renderCategoryFilter('small')}
+                                </Box>
+                            </Badge>
                         </Box>
                     </Box>
                 </Box>
             );
         }
 
-        // ===== Widok pił (mobile) — Maszyna na górze + akordeony =====
         return (
             <Box sx={{ borderBottom: '1px solid', borderColor: 'divider', bgcolor: 'background.paper' }}>
                 <Box sx={{ px: 2, py: 1.5, display: 'flex', gap: 1, alignItems: 'center' }}>
@@ -271,7 +320,6 @@ const FilterPanel = ({
         );
     }
 
-    // --- WIDOK DESKTOP ---
     return (
         <Box sx={{ width: 280, borderRight: '1px solid', borderColor: 'divider', bgcolor: 'background.paper', display: 'flex', flexDirection: 'column' }}>
             <Link
@@ -281,7 +329,7 @@ const FilterPanel = ({
                 sx={{
                     textDecoration: 'none',
                     display: 'block',
-                    '&:hover .logo-box': { filter: 'brightness(0.9)' }, 
+                    '&:hover .logo-box': { filter: 'brightness(0.9)' },
                     '&:hover .text-link': { color: 'primary.main' }
                 }}
             >
@@ -297,52 +345,60 @@ const FilterPanel = ({
                 {isMachineView ? (
                     <>
                         <SectionTitle
-                            extra={(selectedManufacturers.length > 0 || selectedCategories.length > 0) && (
+                            extra={(selectedManufacturers.length > 0 || selectedCategories.length > 0 || machineSearch) && (
                                 <ClearButton onClick={() => {
                                     onManufacturersChange([]);
                                     onCategoriesChange([]);
+                                    onMachineSearchChange("");
                                 }} />
                             )}
                         >
                             FILTRY MASZYN
                         </SectionTitle>
-                        <Typography variant="caption" fontWeight={700} sx={{ display: 'block', mb: 1, mt: 1 }}>
-                            PRODUCENCI
-                        </Typography>
-                        {renderManufacturerFilter()}
-
-                        <Divider sx={{ mb: 3 }} />
-                        <Typography variant="caption" fontWeight={700} sx={{ display: 'block', mb: 1 }}>
-                            TYP MASZYNY
-                        </Typography>
-                        <Box sx={{ mb: 4 }}>
-                            {renderCategoryFilter()}
+                        <Divider sx={{ mb: 2 }} />
+                        <Box sx={{ mb: 3 }}>
+                            {renderMachineSearch()}
                         </Box>
+                        <Divider sx={{ my: 2 }} />
+                        <Box sx={{ mb: 3 }}>
+                            <Typography variant="caption" fontWeight={700} sx={{ display: 'block', mb: 1, color: 'text.secondary', textTransform: 'uppercase' }}>
+                                Producent
+                            </Typography>
+                            {renderManufacturerFilter('small')}
+                        </Box>
+                        <Divider sx={{ my: 2 }} />
+                        <Box sx={{ mb: 3 }}>
+                            <Typography variant="caption" fontWeight={700} sx={{ display: 'block', mb: 1, color: 'text.secondary', textTransform: 'uppercase' }}>
+                                Typ maszyny
+                            </Typography>
+                            {renderCategoryFilter('small')}
+                        </Box>
+                        <Divider sx={{ my: 2 }} />
 
                         <Button
                             fullWidth
                             variant="outlined"
                             onClick={onShowSaws}
                             startIcon={<ListAltIcon />}
-                            sx={{ mt: 2 }}
+                            sx={{ mt: 1, textTransform: 'none', fontWeight: 600 }}
                         >
                             Wróć do pił
                         </Button>
-                        <Typography
-                            variant="caption"
-                            color="text.secondary"
-                            sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 1,
-                                mt: 1.5,
-                                px: 1,
-                                lineHeight: 1.2
-                            }}
-                        >
-                            <InfoOutlinedIcon sx={{ fontSize: 16 }} />
-                            Wróć do listy pił taśmowych bez wybierania konkretnego modelu maszyny
-                        </Typography>
+
+                        <Box sx={{
+                            display: 'flex',
+                            alignItems: 'flex-start',
+                            gap: 1,
+                            mt: 2,
+                            p: 1.5,
+                            bgcolor: 'action.hover',
+                            borderRadius: 1
+                        }}>
+                            <InfoOutlinedIcon sx={{ fontSize: 16, color: 'text.secondary', mt: 0.2 }} />
+                            <Typography variant="caption" color="text.secondary" sx={{ lineHeight: 1.3 }}>
+                                Wróć do listy pił taśmowych bez wybierania konkretnego modelu maszyny.
+                            </Typography>
+                        </Box>
                     </>
                 ) : (
                     <>

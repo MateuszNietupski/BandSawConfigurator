@@ -24,16 +24,19 @@ export default function Home({ saws, loading }) {
         lengthSteps: state.lengthSteps,
         tpiOptions: results.tpiOptions,
         categoryOptions: results.categoryOptions,
-        
+        facetCounts: results.facetCounts,
+
         selectedTypes: state.selectedTypes,
         selectedMachine: state.selectedMachine,
         selectedManufacturers: state.selectedManufacturers,
         selectedCategories: state.selectedCategories,
+        lengthSteps: state.lengthSteps,
         lengthRange: state.lengthRange,
         viewMode: state.viewMode,
         selectedTpi: state.selectedTpi,
+        machineSearch: state.machineSearch,
+
         onTpiChange: handlers.setSelectedTpi,
-        
         onTypesChange: handlers.setSelectedTypes,
         onManufacturersChange: handlers.setSelectedManufacturers,
         onCategoriesChange: handlers.setSelectedCategories,
@@ -42,7 +45,7 @@ export default function Home({ saws, loading }) {
         onShowMachines: handlers.handleShowMachines,
         onClearMachine: handlers.handleClearMachine,
         onShowSaws: handlers.handleShowSaws,
-        facetCounts: results.facetCounts,
+        onMachineSearchChange: handlers.setMachineSearch,
     };
 
     if (loading) return <CircularProgress />;

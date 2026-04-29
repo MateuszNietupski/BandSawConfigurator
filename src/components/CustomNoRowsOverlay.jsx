@@ -26,7 +26,6 @@ export default function CustomNoRowsOveraly({ selectedMachine }) {
                 color="primary.main"
                 sx={{
                     fontWeight: 800,
-                    whiteSpace: isMobile ? 'normal' : 'nowrap', 
                 }}
             >
                 {selectedMachine ? `Piły dla modelu ${selectedMachine.name}` : "Brak wyników"}

@@ -9,7 +9,8 @@ export function useSawFilters(saws, machines) {
     const [lengthRange, setLengthRange] = useState([0, 0]);
     const [selectedTpi, setSelectedTpi] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState([]);
-    
+    const [machineSearch, setMachineSearch] = useState('');
+
     const sawTypes = useMemo(() => [...new Set(saws.map((s) => s.Type))].sort(), [saws]);
     const manufacturers = useMemo(() => [...new Set(machines.map((m) => m.manufacturer))].sort(), [machines]);
     const tpiOptions = useMemo(() => {
@@ -29,7 +30,7 @@ export function useSawFilters(saws, machines) {
         const raw = machines.map(m => m.category).filter(Boolean);
         return [...new Set(raw)].sort();
     }, [machines]);
-    
+
     const lengthSteps = useMemo(() => {
         const available = saws.filter((saw) => {
             if (selectedMachine) {
@@ -44,11 +45,11 @@ export function useSawFilters(saws, machines) {
         const unique = [...new Set(available.map((s) => Number(s.Length)))].sort((a, b) => a - b);
         return unique.length > 0 ? unique : [0];
     }, [saws, selectedMachine, selectedTypes, selectedTpi, machines]);
-    
+
     useEffect(() => {
         setLengthRange([0, lengthSteps.length - 1]);
     }, [lengthSteps]);
-    
+
     const filteredSaws = useMemo(() => {
         return saws.filter((saw) => {
             if (selectedMachine) {
@@ -68,15 +69,37 @@ export function useSawFilters(saws, machines) {
         });
     }, [saws, selectedMachine, selectedTypes, selectedTpi, lengthRange, lengthSteps, machines]);
 
-    const filteredMachines = useMemo(() => {
-        return machines.filter((m) => {
-            const matchesManufacturer = selectedManufacturers.length === 0 ||
-                selectedManufacturers.includes(m.manufacturer);
-            const matchesCategory = selectedCategories.length === 0 ||
-                (m.category && selectedCategories.includes(m.category));
-            return matchesManufacturer && matchesCategory;
+  const filteredMachines = useMemo(() => {
+    const query = (machineSearch || "").toLowerCase().trim();
+
+    const filtered = machines.filter((m) => {
+        const matchesManufacturer = selectedManufacturers.length === 0 ||
+            selectedManufacturers.includes(m.manufacturer);
+        const matchesCategory = selectedCategories.length === 0 ||
+            (m.category && selectedCategories.includes(m.category));
+        const matchesSearch = !query ||
+            (m.name && m.name.toLowerCase().includes(query)) ||
+            (m.manufacturer && m.manufacturer.toLowerCase().includes(query));
+
+        return matchesManufacturer && matchesCategory && matchesSearch;
+    });
+    if (query) {
+        return filtered.sort((a, b) => {
+            const nameA = (a.name || "").toLowerCase();
+            const nameB = (b.name || "").toLowerCase();
+            const manuA = (a.manufacturer || "").toLowerCase();
+            const manuB = (b.manufacturer || "").toLowerCase();
+
+            const startsA = nameA.startsWith(query) || manuA.startsWith(query);
+            const startsB = nameB.startsWith(query) || manuB.startsWith(query);
+
+            if (startsA && !startsB) return -1;
+            if (!startsA && startsB) return 1;
+            return 0;
         });
-    }, [machines, selectedManufacturers, selectedCategories]);
+    }
+    return filtered;
+}, [machines, selectedManufacturers, selectedCategories, machineSearch]);
 
     const handlers = {
         handleSelectMachine: (machine) => {
@@ -99,12 +122,14 @@ export function useSawFilters(saws, machines) {
             setSelectedTpi([]);
             setSelectedCategories([]);
             setLengthRange([0, 0]);
+            setMachineSearch('');
         },
         setSelectedTypes,
         setSelectedManufacturers,
         setLengthRange,
         setSelectedTpi,
-        setSelectedCategories
+        setSelectedCategories,
+        setMachineSearch,
     };
 
     const facetCounts = useMemo(() => {
@@ -126,7 +151,6 @@ export function useSawFilters(saws, machines) {
                         return len >= lengthSteps[val[0]] && len <= lengthSteps[val[1]];
                     }
                     if (key === 'MachineId') {
-                        // Tu klucz: wybrana maszyna filtruje piły po kompatybilności
                         return compatibleMachineIds(saw, machines).includes(val);
                     }
                     return Array.isArray(val) ? val.includes(saw[key]) : saw[key] === val;
@@ -139,7 +163,7 @@ export function useSawFilters(saws, machines) {
                 return acc;
             }, {});
         };
-        
+
         const countMachines = (field) => {
             const filters = {
                 manufacturer: selectedManufacturers,
@@ -171,7 +195,7 @@ export function useSawFilters(saws, machines) {
                 category: countMachines('category')
             }
         };
-    }, [saws, machines, selectedTypes, selectedTpi, lengthRange, selectedMachine, lengthSteps, selectedManufacturers, selectedCategories]);
+    }, [saws, machines, selectedTypes, selectedTpi, lengthRange, selectedMachine, lengthSteps, selectedManufacturers, selectedCategories, machineSearch]);
 
     return {
         state: {
@@ -183,6 +207,7 @@ export function useSawFilters(saws, machines) {
             lengthSteps,
             selectedTpi,
             selectedCategories,
+            machineSearch,
         },
         results: {
             filteredSaws,
