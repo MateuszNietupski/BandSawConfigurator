@@ -335,7 +335,7 @@ const FilterPanel = ({
             >
                 <Box sx={{ p: 2.5, textAlign: 'center', borderBottom: '1px solid', borderColor: 'divider' }}>
                     <Box sx={{ bgcolor: 'primary.main', p: 1, borderRadius: 1, mb: 1 }}>
-                        <img src="/darmet_logo_1.png" alt="Darmet" style={{ height: 40, objectFit: "contain" }} />
+                        <img src="https://www.e-darmet.pl/darmet_logo_1.webp" alt="Darmet - Strona główna" style={{ height: 40, objectFit: "contain" }} />
                     </Box>
                     <Typography variant="caption" color="text.secondary">wróć do strony głównej</Typography>
                 </Box>

@@ -11,7 +11,6 @@ export default function Navbar() {
                     width: "100%"
                 }}
             >
-                {/* LEWA STRONA: logo + tytuł */}
                 <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                     <Link
                         href="https://www.e-darmet.pl"
@@ -20,8 +19,8 @@ export default function Navbar() {
                         sx={{ display: "inline-block" }} 
                     >
                         <img
-                            src="/darmet_logo_1.png"
-                            alt="Darmet"
+                            src="https://www.e-darmet.pl/darmet_logo_1.webp"
+                            alt="Darmet - Strona główna"
                             style={{
                                 height: 40,
                                 objectFit: "contain",

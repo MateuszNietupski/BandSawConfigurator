@@ -18,8 +18,8 @@ const MobileHeader = ({ filteredCount, totalCount, viewMode }) => {
                     }}
                 >
                     <img
-                        src="/darmet_logo_1.png"
-                        alt="Darmet"
+                        src="https://www.e-darmet.pl/darmet_logo_1.webp"
+                        alt="Darmet - Strona główna"
                         style={{
                             width: "100%",
                             height: "100%",

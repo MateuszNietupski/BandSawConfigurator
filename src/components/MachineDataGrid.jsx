@@ -39,6 +39,7 @@ const MachineDataGrid = ({ machines, onSelectMachine }) => {
                         slotProps={{
                             img: {
                                 loading: 'lazy',
+                                alt: params.row.name || 'Zdjęcie maszyny',
                             },
                         }}
                         sx={{
@@ -94,15 +95,18 @@ const MachineDataGrid = ({ machines, onSelectMachine }) => {
             width: isMobile ? 42 : 180,
             sortable: false,
             filterable: false,
-            renderCell: (params) =>
-                isMobile ? (
+            renderCell: (params) => {
+                const machineName = params.row.name;
+                const ariaText = `Wybierz model ${machineName} i sprawdź pasujące piły taśmowe`;
+                return isMobile ? (
                     <Button
                         size="small"
                         color="primary"
                         sx={{ minWidth: 0, p: 0.5 }}
                         onClick={() => onSelectMachine(params.row)}
+                        aria-label={ariaText}
+                        title={ariaText}
                     >
-                        
                         <CheckCircleIcon fontSize="small" />
                     </Button>
                 ) : (
@@ -112,11 +116,14 @@ const MachineDataGrid = ({ machines, onSelectMachine }) => {
                         color="primary"
                         startIcon={<CheckCircleIcon />}
                         onClick={() => onSelectMachine(params.row)}
+                        aria-label={ariaText}
+                        title={ariaText}
                         sx={{ textTransform: 'none', fontWeight: 600, fontSize: 12 }}
                     >
                         Wybierz maszynę
                     </Button>
-                ),
+                );
+            },
         },
     ];
 

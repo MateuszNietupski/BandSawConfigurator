@@ -16,7 +16,7 @@ const DesktopHeader = ({ filteredCount, totalCount, viewMode }) => {
             ) : (
                 <BuildIcon color="primary" />
             )}
-            <Typography variant="h5" fontWeight={700} color="primary.main">
+            <Typography variant="h5" fontWeight={700} component="h1" color="primary.main">
                 {viewMode === 'machines' ? 'Wybierz maszynę' : 'Konfigurator Pił Taśmowych'}
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ ml: 'auto' }}>

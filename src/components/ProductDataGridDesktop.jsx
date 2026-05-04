@@ -35,7 +35,7 @@ export default function ProductGridDesktop({ rows, selectedMachine }) {
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
                     <Avatar
                         variant="rounded"
-                        src={params.row.imageUrl || params.row.Image}
+                        src={(params.row.imageUrl || params.row.Image)}
                         onClick={(e) => {
                             e.stopPropagation();
                             const imgUrl = params.row.imageUrl || params.row.Image;
@@ -43,6 +43,7 @@ export default function ProductGridDesktop({ rows, selectedMachine }) {
                         }}
                         slotProps={{
                             img: {
+                                alt: params.row.Title || 'Zdjęcie piły taśmowej',
                                 loading: 'lazy',
                             },
                         }}
@@ -187,6 +188,8 @@ export default function ProductGridDesktop({ rows, selectedMachine }) {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
+                    title={`Piła ${params.row.Type} Taśma ${params.row.Length}x${params.row.Width}x${params.row.Thickness} TPI ${params.row.Tpi}`}
+                    aria-label={`Sprawdź cenę w sklepie dla piły ${params.row.Type} o wymiarach ${params.row.Length}x${params.row.Width}x${params.row.Thickness} mm i TPI ${params.row.Tpi}`}
                     sx={{
                         textTransform: 'none',
                         fontWeight: 600,
